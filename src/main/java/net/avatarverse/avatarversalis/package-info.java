@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package net.avatarverse.avatarversalis;
+
+import javax.annotation.ParametersAreNonnullByDefault;
