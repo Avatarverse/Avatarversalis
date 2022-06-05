@@ -43,4 +43,9 @@ public class FireBlast extends AbilityInstance {
 	protected void end() {
 
 	}
+
+	@Override
+	protected void load() {
+		
+	}
 }

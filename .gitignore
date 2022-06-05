@@ -1,2 +1,5 @@
 target/
 .idea/
+.vscode/
+pom.xml
+build.bat
