@@ -3,4 +3,4 @@ author: Aztl, s3nn
 api-version: 1.18
 version: 0.0.1
 main: net.avatarverse.avatarversalis.Avatarversalis
-depend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI]
