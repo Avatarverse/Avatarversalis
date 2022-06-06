@@ -7,7 +7,7 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 
 import net.avatarverse.avatarversalis.core.element.Element;
-import net.avatarverse.avatarversalis.core.user.LivingEntityUser;
+import net.avatarverse.avatarversalis.core.user.User;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public final class Particles {
 		return new Particles(Particle.SPELL);
 	}
 
-	public static Particles fire(LivingEntityUser user) {
+	public static Particles fire(User user) {
 		Particle particle = user.hasElement(Element.BLUE_FIRE) ? Particle.SOUL_FIRE_FLAME : Particle.FLAME;
 		return new Particles(particle);
 	}
