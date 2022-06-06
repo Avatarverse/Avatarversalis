@@ -12,7 +12,6 @@ public enum Attribute {
 	SPEED("Speed"),
 	CHARGE_TIME("ChargeTime"),
 	RADIUS("Radius"),
-	HIT_RADIUS("HitRadius"),
 	HEIGHT("Height"),
 	AMOUNT("Amount"),
 	FIRE_TICKS("FireTicks"),

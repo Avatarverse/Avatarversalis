@@ -27,18 +27,18 @@ public class EntityUser extends User {
 	}
 
 	@Override
-	public void addCooldown(Ability ability, Cooldown cooldown) {
-
-	}
-
-	@Override
-	public void removeCooldown(Ability ability) {
-
-	}
-
-	@Override
 	public boolean canBend(Ability ability) {
 		return false;
+	}
+
+	@Override
+	public int currentSlot() {
+		return 0;
+	}
+
+	@Override
+	public Ability selectedAbility() {
+		return null;
 	}
 
 	@Override

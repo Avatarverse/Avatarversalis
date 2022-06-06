@@ -5,10 +5,10 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
-public class DamagePolicy implements RemovalPolicy {
+public class DamagePolicy implements EndingPolicy {
 
 	private final double damageThreshold;
 	private final double originalHealth;

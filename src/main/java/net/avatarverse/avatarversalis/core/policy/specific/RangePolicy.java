@@ -6,10 +6,10 @@ import java.util.function.Supplier;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
-public class RangePolicy implements RemovalPolicy {
+public class RangePolicy implements EndingPolicy {
 
 	private final double range;
 	private final Location origin;

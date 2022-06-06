@@ -1,14 +1,23 @@
 package net.avatarverse.avatarversalis.core.user;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
+import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
+import net.avatarverse.avatarversalis.core.ability.AbilityManager;
+import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.temporary.Cooldown;
 
 import lombok.Getter;
@@ -16,22 +25,91 @@ import lombok.Setter;
 
 public abstract class User {
 
+	public static final Map<UUID, User> USERS = new HashMap<>();
+	public static final Map<Block, BlockUser> BLOCK_USERS = new HashMap<>();
+
 	@Getter protected final UUID uuid;
 	@Getter @Setter private boolean toggled;
+	@Getter private final Map<Element, Boolean> elements; // <Element, Toggled?>
 
 	public User(UUID uuid) {
 		this.uuid = uuid;
-		UserManager.USERS.put(uuid, this);
+		this.elements = new HashMap<>();
+		USERS.put(uuid, this);
+	}
+
+	public static @Nullable User byId(UUID uuid) {
+		return USERS.get(uuid);
+	}
+
+	public static @Nullable User byEntity(Entity entity) {
+		return USERS.get(entity.getUniqueId());
+	}
+
+	public @Nullable <T extends User> T as(Class<T> clazz) {
+		return clazz.isInstance(this) ? clazz.cast(this) : null;
+	}
+
+	public Set<AbilityInstance> activeAbilities() {
+		return new HashSet<>(AbilityManager.INSTANCES_BY_USER.get(this));
+	}
+
+	public boolean hasElement(Element element) {
+		return elements.containsKey(element);
+	}
+
+	public void addElement(Element... elements) {
+		Arrays.stream(elements).forEach(e -> this.elements.put(e, true));
+	}
+
+	public void removeElement(Element... elements) {
+		Arrays.stream(elements).forEach(this.elements::remove);
+	}
+
+	public void toggleElement(Element element, boolean toggled) {
+		elements.replace(element, toggled);
 	}
 
 	public boolean isOnCooldown(Ability ability) {
 		return cooldown(ability) != null;
 	}
 
-	public abstract @Nullable Cooldown cooldown(Ability ability);
-	public abstract void addCooldown(Ability ability, Cooldown cooldown);
-	public abstract void removeCooldown(Ability ability);
+	public @Nullable Cooldown cooldown(Ability ability) {
+		return cooldown(ability.name());
+	}
+
+	public @Nullable Cooldown cooldown(String ability) {
+		return Cooldown.find(this, ability);
+	}
+
+	public void addCooldown(Ability ability, long cooldown) {
+		addCooldown(ability.name(), cooldown, null);
+	}
+
+	public void addCooldown(Ability ability, long cooldown, Runnable endTask) {
+		addCooldown(ability.name(), cooldown, endTask);
+	}
+
+	public void addCooldown(String ability, long cooldown) {
+		addCooldown(ability, cooldown, null);
+	}
+
+	public void addCooldown(String ability, long cooldown, Runnable endTask) {
+		Cooldown.of(this, ability, cooldown, endTask);
+	}
+
+	public boolean removeCooldown(Ability ability) {
+		return removeCooldown(ability.name());
+	}
+
+	public boolean removeCooldown(String ability) {
+		Cooldown cooldown = cooldown(ability);
+		return cooldown != null && cooldown.remove();
+	}
+
 	public abstract boolean canBend(Ability ability);
+	public abstract int currentSlot();
+	public abstract Ability selectedAbility();
 	public abstract Location location();
 	public abstract Location eyeLocation();
 	public abstract Block locBlock();

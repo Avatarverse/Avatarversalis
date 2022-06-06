@@ -9,7 +9,7 @@ import net.avatarverse.avatarversalis.core.user.User;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum Policies implements RemovalPolicy {
+public enum Policies implements EndingPolicy {
 
 	DEAD(User::dead),
 	OFFLINE(User::valid),
@@ -20,7 +20,7 @@ public enum Policies implements RemovalPolicy {
 	FEET_IN_LIQUID(u -> u.locBlock().isLiquid()),
 	HEAD_IN_LIQUID(u -> u.headBlock().isLiquid());
 
-	private final RemovalPolicy policy;
+	private final EndingPolicy policy;
 
 	public static Builder builder() {
 		return new Builder()
@@ -34,13 +34,13 @@ public enum Policies implements RemovalPolicy {
 	}
 
 	public static final class Builder {
-		private final Set<RemovalPolicy> policies;
+		private final Set<EndingPolicy> policies;
 
 		private Builder() {
 			policies = new HashSet<>();
 		}
 
-		public Builder add(RemovalPolicy policy) {
+		public Builder add(EndingPolicy policy) {
 			policies.add(policy);
 			return this;
 		}
@@ -50,8 +50,8 @@ public enum Policies implements RemovalPolicy {
 			return this;
 		}
 
-		public CompositeRemovalPolicy build() {
-			return new CompositeRemovalPolicy(policies);
+		public CompositeEndingPolicy build() {
+			return new CompositeEndingPolicy(policies);
 		}
 	}
 

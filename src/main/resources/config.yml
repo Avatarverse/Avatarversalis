@@ -1,0 +1,9 @@
+abilities:
+  fire:
+    FireBlast:
+      cooldown: 1500
+      damage: 2
+      range: 20
+      speed: 1
+      hit-radius: 1
+      fire-ticks: 1

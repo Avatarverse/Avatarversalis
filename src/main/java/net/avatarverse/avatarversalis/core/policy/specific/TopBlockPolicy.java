@@ -5,14 +5,14 @@ import java.util.function.Supplier;
 
 import org.bukkit.block.Block;
 
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class TopBlockPolicy implements RemovalPolicy {
+public class TopBlockPolicy implements EndingPolicy {
 
 	private final Supplier<Block> block;
 	private final Predicate<Block> condition;

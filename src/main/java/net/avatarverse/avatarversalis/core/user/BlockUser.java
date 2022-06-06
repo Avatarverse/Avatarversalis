@@ -22,7 +22,7 @@ public class BlockUser extends User {
 	private BlockUser(Block block) {
 		super(UUID.randomUUID());
 		this.block = block;
-		UserManager.BLOCK_USERS.put(block, this);
+		BLOCK_USERS.put(block, this);
 	}
 
 	public static BlockUser registerBlockUser(Block block) {
@@ -36,12 +36,12 @@ public class BlockUser extends User {
 	}
 
 	public static @Nullable BlockUser of(Block block) {
-		return UserManager.BLOCK_USERS.get(block);
+		return BLOCK_USERS.get(block);
 	}
 
 	public void unregister() {
-		UserManager.USERS.remove(uuid);
-		UserManager.BLOCK_USERS.remove(block);
+		USERS.remove(uuid);
+		BLOCK_USERS.remove(block);
 	}
 
 	@Override
@@ -50,18 +50,18 @@ public class BlockUser extends User {
 	}
 
 	@Override
-	public void addCooldown(Ability ability, Cooldown cooldown) {
-
-	}
-
-	@Override
-	public void removeCooldown(Ability ability) {
-
-	}
-
-	@Override
 	public boolean canBend(Ability ability) {
 		return false;
+	}
+
+	@Override
+	public int currentSlot() {
+		return 0;
+	}
+
+	@Override
+	public Ability selectedAbility() {
+		return null;
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class BlockUser extends User {
 
 	@Override
 	public boolean valid() {
-		return UserManager.BLOCK_USERS.containsKey(block);
+		return BLOCK_USERS.containsKey(block);
 	}
 
 	@Override

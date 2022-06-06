@@ -1,19 +1,23 @@
 package net.avatarverse.avatarversalis.core.ability;
 
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.element.Element;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 public class Ability {
 
 	private final String name, description, instructions;
+	private @Nullable String author, version;
 	private final Element element;
-	private final EnumSet<Activation> activations;
-	private final Set<String> permissions;
+	private final Map<Activation, Class<? extends AbilityInstance>> activations;
+	private final Map<Class<? extends AbilityInstance>, Activation> controls;
 	private final boolean bindable, hidden;
 
 	private Ability(Builder builder) {
@@ -22,27 +26,38 @@ public class Ability {
 		this.instructions = builder.instructions;
 		this.element = builder.element;
 		this.activations = builder.activations;
-		this.permissions = builder.permissions;
+		this.controls = builder.controls;
 		this.bindable = builder.bindable;
 		this.hidden = builder.hidden;
+
+		this.author = builder.author;
+		this.version = builder.version;
+
+		AbilityManager.ABILITIES_BY_NAME.put(name, this);
+		activations.values().forEach(clazz -> AbilityManager.ABILITIES_BY_CLASS.put(clazz, this));
+	}
+
+	public static @Nullable Ability byName(String name) {
+		return AbilityManager.ABILITIES_BY_NAME.get(name);
 	}
 
 	public String displayName() {
 		return element.display().color() + name;
 	}
 
-	private static class Builder {
+	public static Builder builder(String name, Element element) {
+		return new Builder(name, element);
+	}
 
-		private String name, description, instructions;
-		private Element element;
-		private EnumSet<Activation> activations;
-		private Set<String> permissions;
+	@RequiredArgsConstructor
+	public static final class Builder {
+
+		private final String name;
+		private final Element element;
+		private String description, instructions, author, version;
+		private final Map<Activation, Class<? extends AbilityInstance>> activations = new HashMap<>();
+		private final Map<Class<? extends AbilityInstance>, Activation> controls = new HashMap<>();
 		private boolean bindable, hidden;
-
-		public Builder name(String name) {
-			this.name = name;
-			return this;
-		}
 
 		public Builder description(String description) {
 			this.description = description;
@@ -54,32 +69,40 @@ public class Ability {
 			return this;
 		}
 
-		public Builder element(Element element) {
-			this.element = element;
+		public <T extends AbilityInstance> Builder activation(Activation activation, Class<T> ability) {
+			this.activations.put(activation, ability);
 			return this;
 		}
 
-		public Builder activations(Activation activation, Activation... activations) {
-			this.activations = EnumSet.of(activation, activations);
+		public <T extends AbilityInstance> Builder control(Class<T> ability, Activation activation) {
+			this.controls.put(ability, activation);
 			return this;
 		}
 
-		public Builder permissions(String... permissions) {
-			this.permissions = Set.of(permissions);
+		public Builder bindable() {
+			this.bindable = true;
 			return this;
 		}
 
-		public Builder bindable(boolean bindable) {
-			this.bindable = bindable;
+		public Builder hidden() {
+			this.hidden = true;
 			return this;
 		}
 
-		public Builder hidden(boolean hidden) {
-			this.hidden = hidden;
+		public Builder author(String author) {
+			this.author = author;
+			return this;
+		}
+
+		public Builder version(String version) {
+			this.version = version;
 			return this;
 		}
 
 		public Ability build() {
+			if (description == null || instructions == null) {
+				// load from config
+			}
 			return new Ability(this);
 		}
 

@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import org.bukkit.World;
 
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
-public class DifferentWorldPolicy implements RemovalPolicy {
+public class DifferentWorldPolicy implements EndingPolicy {
 
 	private final World original;
 	private final Supplier<World> current;

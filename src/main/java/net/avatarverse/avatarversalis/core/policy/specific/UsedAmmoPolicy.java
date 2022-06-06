@@ -5,10 +5,10 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
-public class UsedAmmoPolicy implements RemovalPolicy {
+public class UsedAmmoPolicy implements EndingPolicy {
 
 	private final Supplier<Integer> ammo;
 	private final Predicate<User> condition;

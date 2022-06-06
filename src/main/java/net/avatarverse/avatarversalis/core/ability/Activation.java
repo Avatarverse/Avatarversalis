@@ -1,13 +1,21 @@
 package net.avatarverse.avatarversalis.core.ability;
 
+import java.util.function.Consumer;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum Activation {
 
-	ATTACK,
-	INTERACT,
-	INTERACT_ENTITY,
-	INTERACT_BLOCK,
-	SNEAK,
-	SNEAK_RELEASE,
-	FALL
+	ATTACK(AbilityInstance::onAttack),
+	INTERACT(AbilityInstance::onInteract),
+	INTERACT_ENTITY(AbilityInstance::onInteractEntity),
+	INTERACT_BLOCK(AbilityInstance::onInteractBlock),
+	SNEAK(AbilityInstance::onSneak),
+	SNEAK_RELEASE(AbilityInstance::onSneakRelease),
+	FALL(AbilityInstance::onFall);
+
+	@Getter private final Consumer<AbilityInstance> method;
 
 }

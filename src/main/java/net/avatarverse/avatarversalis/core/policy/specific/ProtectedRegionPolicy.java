@@ -5,14 +5,14 @@ import java.util.function.Supplier;
 import org.bukkit.Location;
 
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProtectedRegionPolicy implements RemovalPolicy {
+public class ProtectedRegionPolicy implements EndingPolicy {
 
 	private final AbilityInstance ability;
 	private final Supplier<Location> location;

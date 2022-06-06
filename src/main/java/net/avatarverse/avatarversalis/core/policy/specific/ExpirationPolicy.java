@@ -1,9 +1,9 @@
 package net.avatarverse.avatarversalis.core.policy.specific;
 
-import net.avatarverse.avatarversalis.core.policy.RemovalPolicy;
+import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
 
-public class ExpirationPolicy implements RemovalPolicy {
+public class ExpirationPolicy implements EndingPolicy {
 
 	private final long expireTime;
 	private final boolean finite;
