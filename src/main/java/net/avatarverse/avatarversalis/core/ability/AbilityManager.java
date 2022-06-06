@@ -10,11 +10,15 @@ import org.bukkit.plugin.Plugin;
 
 import net.avatarverse.avatarversalis.ability.fire.FireBlast;
 import net.avatarverse.avatarversalis.ability.fire.FireBlastCharged;
+import net.avatarverse.avatarversalis.ability.fire.passive.Illumination;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.util.Scheduler;
 
-public class AbilityManager {
+/**
+ * Manages all registered instances of {@link Ability} and {@link AbilityInstance}
+ */
+public final class AbilityManager {
 
 	static final Map<String, Ability> ABILITIES_BY_NAME = new HashMap<>();
 	static final Map<Class<? extends AbilityInstance>, Ability> ABILITIES_BY_CLASS = new HashMap<>();
@@ -42,6 +46,8 @@ public class AbilityManager {
 	}
 
 	private void registerCoreAbilities() {
+		Ability.builder("Illumination", Element.FIRE)
+				.activation(Activation.ATTACK, Illumination.class).build();
 		Ability.builder("FireBlast", Element.FIRE)
 				.activation(Activation.ATTACK, FireBlast.class)
 				.activation(Activation.SNEAK, FireBlastCharged.class)
@@ -53,6 +59,11 @@ public class AbilityManager {
 
 	}
 
+	/**
+	 * Registers a plugin's addon abilities (classes that extend {@link AbilityInstance}) from a package
+	 * @param plugin the {@link Plugin} to register
+	 * @param packageName the fully qualified package name containing {@link AbilityInstance} classes
+	 */
 	public static void registerPluginAbilities(Plugin plugin, String packageName) {
 
 	}

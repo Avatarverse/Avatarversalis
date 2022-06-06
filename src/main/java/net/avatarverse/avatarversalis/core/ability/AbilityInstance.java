@@ -14,12 +14,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * An actual instance of an Ability. Individual abilities should extend this class.
+ */
+@Getter
 public abstract class AbilityInstance {
 
-	@Getter @Setter(AccessLevel.PACKAGE) protected User user;
-	@Getter protected final Ability ability;
-	@Getter protected final Set<AttributeModifier> modifiers;
-	@Getter protected final long startTime;
+	@Setter(AccessLevel.PACKAGE) protected User user;
+	protected final Ability ability;
+	protected final Set<AttributeModifier> modifiers;
+	protected final long startTime;
 
 	public AbilityInstance(User user) {
 		this.user = user;
@@ -35,11 +39,11 @@ public abstract class AbilityInstance {
 	}
 
 	private void addBaseModifiers() {
-		if (ability.element() == Element.FIRE) // TODO && isDay
+		if (ability.element().isOrInherits(Element.FIRE)) // TODO && isDay
 			modifiers.addAll(Fire.dayFactor().modifiers());
-		if (user.hasElement(Element.BLUE_FIRE))
+		if (ability.element().isOrInherits(Element.FIRE) && user.hasElement(Element.BLUE_FIRE))
 			modifiers.addAll(Fire.blueFireFactor().modifiers());
-		if (ability.element() == Element.WATER)
+		if (ability.element().isOrInherits(Element.WATER))
 			modifiers.addAll(Water.nightFactor().modifiers()); // TODO && isNight
 	}
 
@@ -52,6 +56,7 @@ public abstract class AbilityInstance {
 	public final void end() {
 		AbilityManager.INSTANCES.remove(this);
 		AbilityManager.INSTANCES_BY_USER.get(user).remove(this);
+		cleanup();
 	}
 
 	protected abstract void load();
@@ -66,6 +71,8 @@ public abstract class AbilityInstance {
 	protected void onSneak() {}
 	protected void onSneakRelease() {}
 	protected void onFall() {}
+	protected void onSunrise() {}
+	protected void onSunset() {}
 
 	protected boolean elapsed(long interval) {
 		return elapsed(startTime, interval);

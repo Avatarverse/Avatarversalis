@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.core.temporary;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.Nullable;
 
+import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.element.Element;
 
 import net.jodah.expiringmap.ExpirationListener;
@@ -26,12 +26,14 @@ public class TempBlock implements Revertible {
 			.build();
 
 	@Getter private final Block block;
+	@Getter private AbilityInstance ability;
 	@Getter private Set<Element> bendableElements;
 	@Getter private BlockData newData;
 	@Getter private boolean reverted = false;
 
 	private TempBlock(Builder builder) {
 		this.block = builder.block;
+		this.ability = builder.ability;
 		this.newData = builder.data;
 		this.bendableElements = builder.bendableElements;
 		INSTANCES.put(block, this, builder.duration, TimeUnit.MILLISECONDS);
@@ -47,6 +49,11 @@ public class TempBlock implements Revertible {
 
 	public TempBlock update(BlockData newData) {
 		this.newData = newData;
+		return this;
+	}
+
+	public TempBlock update(AbilityInstance ability) {
+		this.ability = ability;
 		return this;
 	}
 
@@ -73,8 +80,14 @@ public class TempBlock implements Revertible {
 	public static final class Builder {
 		private final BlockData data;
 		private Block block;
+		private AbilityInstance ability;
 		private Set<Element> bendableElements;
 		private long duration;
+
+		public Builder ability(AbilityInstance ability) {
+			this.ability = ability;
+			return this;
+		}
 
 		public Builder bendableBy(Element... elements) {
 			bendableElements = Set.of(elements);
@@ -91,6 +104,7 @@ public class TempBlock implements Revertible {
 			TempBlock tb = INSTANCES.get(block);
 			if (tb != null) {
 				return tb.update(data)
+						.update(ability)
 						.update(bendableElements)
 						.update(duration);
 			}

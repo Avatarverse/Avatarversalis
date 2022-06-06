@@ -14,7 +14,9 @@ public enum Activation {
 	INTERACT_BLOCK(AbilityInstance::onInteractBlock),
 	SNEAK(AbilityInstance::onSneak),
 	SNEAK_RELEASE(AbilityInstance::onSneakRelease),
-	FALL(AbilityInstance::onFall);
+	FALL(AbilityInstance::onFall),
+	SUNRISE(AbilityInstance::onSunrise),
+	SUNSET(AbilityInstance::onSunset);
 
 	@Getter private final Consumer<AbilityInstance> method;
 

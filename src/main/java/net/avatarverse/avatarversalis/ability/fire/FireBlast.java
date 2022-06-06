@@ -127,9 +127,4 @@ public class FireBlast extends AbilityInstance {
 			igniteBlockRadius = radius.node("ignite-block").getDouble(1);
 		}
 	}
-
-	@Override
-	protected void load() {
-		
-	}
 }

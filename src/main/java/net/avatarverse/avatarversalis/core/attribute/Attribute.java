@@ -1,7 +1,14 @@
 package net.avatarverse.avatarversalis.core.attribute;
 
-import lombok.Getter;
+import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Attributes are categories that aspects of abilities (fields of {@link AbilityInstance} can fit into.
+ */
+@RequiredArgsConstructor
 public enum Attribute {
 
 	DAMAGE("Damage"),
@@ -18,9 +25,5 @@ public enum Attribute {
 	FREEZE_TICKS("FreezeTicks");
 
 	@Getter private final String value;
-
-	Attribute(String value) {
-		this.value = value;
-	}
 
 }

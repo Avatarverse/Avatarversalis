@@ -10,6 +10,10 @@ import net.avatarverse.avatarversalis.core.element.Element;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Represents static ability information, as opposed to an instance of the ability.
+ * Building an Ability automatically adds it to the AbilityManager collections.
+ */
 @Data
 public class Ability {
 

@@ -13,6 +13,9 @@ import net.avatarverse.avatarversalis.core.attribute.AttributeModifier;
 import net.avatarverse.avatarversalis.core.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.attribute.ModifierOperation;
 
+/**
+ * Loads ability configs, applies modifiers
+ */
 public abstract class AbilityConfig implements Cloneable {
 
 	protected CommentedConfigurationNode root;

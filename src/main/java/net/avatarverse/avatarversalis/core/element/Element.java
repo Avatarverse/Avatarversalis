@@ -1,7 +1,11 @@
 package net.avatarverse.avatarversalis.core.element;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -58,6 +62,25 @@ public class Element {
 
 		ELEMENTS.put(name, element);
 		return element;
+	}
+
+	public boolean isOrInherits(Element other) {
+		if (this == other) return true;
+		if (parents.contains(other)) return true;
+		Set<Element> visited = new HashSet<>();
+		Deque<Element> queue = new ArrayDeque<>();
+		parents.forEach(queue::offerLast);
+		while (!queue.isEmpty()) {
+			Element node = queue.poll();
+			if (!visited.contains(node)) {
+				if (node == other) return true;
+				visited.add(node);
+				for (Element parent : node.parents)
+					if (!visited.contains(parent))
+						queue.offerLast(parent);
+			}
+		}
+		return false;
 	}
 
 }

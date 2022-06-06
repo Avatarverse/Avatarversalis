@@ -92,8 +92,9 @@ public class FireBlastCharged extends AbilityInstance {
 			if (policy.test(user)) return false;
 
 			Blocks.nearby(location, config.hitRadius, Blocks::air).forEach(b -> {
-				fire.spawn(b.getLocation());
-				sound.play(b.getLocation(), 0.25);
+				Location center = Blocks.center(b);
+				fire.spawn(center);
+				sound.play(center, 0.25);
 			});
 			Entities.nearby(location, config.hitRadius, Entities.shouldAffect(user, location)).forEach(e -> {
 				effects.apply(e);

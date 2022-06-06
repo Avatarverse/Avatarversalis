@@ -5,7 +5,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 /**
- * Provides graphical funtionality through Minecraft scoreboards for bending
+ * Provides graphical functionality through Minecraft scoreboards for bending
  */
 
 public class BendingBoard {

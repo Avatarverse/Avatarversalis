@@ -19,6 +19,8 @@ import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.ability.Activation;
 import net.avatarverse.avatarversalis.core.user.User;
+import net.avatarverse.avatarversalis.event.WorldSunriseEvent;
+import net.avatarverse.avatarversalis.event.WorldSunsetEvent;
 
 public class Controller implements Listener {
 
@@ -87,6 +89,18 @@ public class Controller implements Listener {
 		Optional.ofNullable(User.byEntity(event.getEntity())).ifPresent(u ->
 				activate(u, Activation.FALL)
 		);
+	}
+
+	@EventHandler
+	public void onSunrise(WorldSunriseEvent event) {
+		User.USERS.values().stream().filter(u -> event.world() == u.location().getWorld())
+				.forEach(u -> activate(u, Activation.SUNRISE));
+	}
+
+	@EventHandler
+	public void onSunset(WorldSunsetEvent event) {
+		User.USERS.values().stream().filter(u -> event.world() == u.location().getWorld())
+				.forEach(u -> activate(u, Activation.SUNSET));
 	}
 
 }

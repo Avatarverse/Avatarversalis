@@ -2,6 +2,7 @@ package net.avatarverse.avatarversalis.util;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang.Validate;
@@ -11,14 +12,51 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.serialize.SerializationException;
 
+import net.avatarverse.avatarversalis.Avatarversalis;
 import net.avatarverse.avatarversalis.util.Geometry.Axis;
 
 public final class Blocks {
 
+	public static List<Material> earthbendables;
+
+	static {
+		try {
+			earthbendables = Avatarversalis.configManager().config().node("properties", "earth", "earthbendable-blocks").getList(Material.class);
+		} catch (SerializationException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static boolean air(Block block) {
 		Material type = block.getType();
 		return type == Material.AIR || type == Material.CAVE_AIR || type == Material.VOID_AIR || type == Material.LIGHT;
+	}
+
+	public static boolean earth(Block block) {
+		Material type = block.getType();
+		return earthbendables.contains(type);
+	}
+
+	public static boolean fire(Block block) {
+		Material type = block.getType();
+		return type == Material.FIRE || type == Material.SOUL_FIRE;
+	}
+
+	public static boolean water(Block block) {
+		Material type = block.getType();
+		return type == Material.WATER;
+	}
+
+	public static boolean ice(Block block) {
+		Material type = block.getType();
+		return type == Material.ICE || type == Material.PACKED_ICE || type == Material.BLUE_ICE;
+	}
+
+	public static boolean snow(Block block) {
+		Material type = block.getType();
+		return type == Material.SNOW || type == Material.SNOW_BLOCK || type == Material.POWDER_SNOW;
 	}
 
 	public static boolean liquid(Block block) {
