@@ -20,6 +20,10 @@ public class LiquidPolicy implements EndingPolicy {
 	private final Supplier<Location> location;
 	private final Supplier<Vector> direction;
 
+	public static LiquidPolicy of(Supplier<Location> location) {
+		return new LiquidPolicy(location, Vector::new);
+	}
+
 	public static LiquidPolicy of(Supplier<Location> location, Supplier<Vector> direction) {
 		return new LiquidPolicy(location, direction);
 	}

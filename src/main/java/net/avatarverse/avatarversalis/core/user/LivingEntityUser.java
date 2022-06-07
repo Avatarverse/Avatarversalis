@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
+import net.avatarverse.avatarversalis.util.Geometry;
 
 import lombok.Getter;
 
@@ -21,8 +22,14 @@ public class LivingEntityUser extends EntityUser {
 		return false;
 	}
 
+	@Override
 	public Location eyeLocation() {
 		return entity.getEyeLocation();
+	}
+
+	@Override
+	public Location handLocation() {
+		return Geometry.right(location(), 0.55).add(0, 0.7 * entity.getHeight(), 0);
 	}
 
 }

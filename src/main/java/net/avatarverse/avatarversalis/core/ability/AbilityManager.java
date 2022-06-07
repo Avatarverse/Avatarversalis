@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 import net.avatarverse.avatarversalis.ability.fire.FireBlast;
 import net.avatarverse.avatarversalis.ability.fire.FireBlastCharged;
-import net.avatarverse.avatarversalis.ability.fire.passive.Illumination;
+import net.avatarverse.avatarversalis.ability.fire.Illumination;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.util.Scheduler;
@@ -47,7 +47,9 @@ public final class AbilityManager {
 
 	private void registerCoreAbilities() {
 		Ability.builder("Illumination", Element.FIRE)
-				.activation(Activation.ATTACK, Illumination.class).build();
+				.activation(Activation.ATTACK, Illumination.class)
+				.control(Illumination.class, Activation.ATTACK)
+				.bindable().build();
 		Ability.builder("FireBlast", Element.FIRE)
 				.activation(Activation.ATTACK, FireBlast.class)
 				.activation(Activation.SNEAK, FireBlastCharged.class)

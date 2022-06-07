@@ -32,6 +32,11 @@ public final class Sounds {
 		play(location, 1);
 	}
 
+	/**
+	 * Plays the sound at the given location with a given chance.
+	 * @param location the {@link Location} at which to play the sound. Must have a valid {@link org.bukkit.World}.
+	 * @param chance a double between 0 and 1, meaning 0% and 100% respectively. Should be 1.0 if the sound should always play.
+	 */
 	public void play(Location location, double chance) {
 		if (ThreadLocalRandom.current().nextInt((int) Math.round(1 / chance)) != 0) return;
 		Validate.notNull(location.getWorld(), "Location must have a world in order to be used for sounds");

@@ -6,7 +6,7 @@ main: net.avatarverse.avatarversalis.Avatarversalis
 softdepend: [PlaceholderAPI]
 commands:
   bending:
-    aliases: [b, avatarversalis, avatar, av, pk, tla]
+    aliases: [b, avatarversalis, avatar, av, avs, pk, tla, mtla, bend]
     usage: /<command>
 permissions:
   bending.admin:

@@ -1,23 +1,23 @@
 package net.avatarverse.avatarversalis.event;
 
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.user.User;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
-@RequiredArgsConstructor
-public abstract class AbilityEvent extends BendingEvent implements Cancellable {
+@Getter
+public abstract class AbilityEvent extends UserEvent implements Cancellable {
 
-	private static final HandlerList handlers = new HandlerList();
-
-	private final User user;
 	private final AbilityInstance ability;
 
 	private boolean cancelled = false;
+
+	public AbilityEvent(User user, AbilityInstance ability) {
+		super(user);
+		this.ability = ability;
+	}
 
 	public AbilityEvent call() {
 		super.call();
@@ -32,14 +32,5 @@ public abstract class AbilityEvent extends BendingEvent implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancelled = cancel;
-	}
-
-	@Override
-	public @NotNull HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
 	}
 }

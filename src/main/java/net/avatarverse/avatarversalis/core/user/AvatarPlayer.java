@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
+import net.avatarverse.avatarversalis.util.Geometry;
 
 import lombok.Getter;
 
@@ -30,6 +32,11 @@ public class AvatarPlayer extends LivingEntityUser {
 	@Override
 	public @Nullable Ability selectedAbility() {
 		return BINDS.get(currentSlot());
+	}
+
+	@Override
+	public Location handLocation() {
+		return Geometry.move(location(), 0.55, player.getMainHand()).add(0, 1.2, 0);
 	}
 
 	@Override

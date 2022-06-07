@@ -33,7 +33,7 @@ public class Controller implements Listener {
 					.filter(e -> e.getValue() == activation)
 					.map(Entry::getKey)
 					.collect(Collectors.toSet());
-			user.activeAbilities().stream()
+			user.activeInstances().stream()
 					.filter(ai -> relevantClasses.contains(ai.getClass()))
 					.forEach(activation.method());
 			return;

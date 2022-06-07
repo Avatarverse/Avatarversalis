@@ -7,6 +7,7 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 
 import net.avatarverse.avatarversalis.core.element.Element;
+import net.avatarverse.avatarversalis.core.temporary.TempBlock;
 import net.avatarverse.avatarversalis.core.user.User;
 
 import lombok.AccessLevel;
@@ -21,6 +22,7 @@ public final class Particles {
 	@Setter private double offsetX = 0, offsetY = 0, offsetZ = 0;
 	@Setter private double extra = 0;
 	@Setter private Object data;
+	@Setter private FauxLight light;
 
 	private Particles(Color color, float size) {
 		particle = Particle.REDSTONE;
@@ -34,6 +36,8 @@ public final class Particles {
 	public void spawn(Location location) {
 		Validate.notNull(location.getWorld(), "Location must have a world in order to be used for particles");
 		location.getWorld().spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, extra, data, true);
+		if (light != null)
+			TempBlock.builder(light.data()).duration(50).build(location.getBlock());
 	}
 
 	public Particles offset(double offset) {
@@ -54,11 +58,11 @@ public final class Particles {
 
 	public static Particles fire(User user) {
 		Particle particle = user.hasElement(Element.BLUE_FIRE) ? Particle.SOUL_FIRE_FLAME : Particle.FLAME;
-		return new Particles(particle);
+		return new Particles(particle).light(FauxLight.of(15));
 	}
 
 	public static Particles fire() {
-		return new Particles(Particle.FLAME);
+		return new Particles(Particle.FLAME).light(FauxLight.of(15));
 	}
 
 	public static Particles bubble() {

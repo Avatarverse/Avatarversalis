@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -50,8 +51,16 @@ public abstract class User {
 		return clazz.isInstance(this) ? clazz.cast(this) : null;
 	}
 
-	public Set<AbilityInstance> activeAbilities() {
+	public Set<AbilityInstance> activeInstances() {
 		return new HashSet<>(AbilityManager.INSTANCES_BY_USER.get(this));
+	}
+
+	public <T extends AbilityInstance> Set<T> activeInstances(Class<T> clazz) {
+		return AbilityManager.INSTANCES_BY_USER.get(this).stream().filter(a -> a.getClass().equals(clazz)).map(clazz::cast).collect(Collectors.toSet());
+	}
+
+	public <T extends AbilityInstance> T activeInstance(Class<T> clazz) {
+		return AbilityManager.INSTANCES_BY_USER.get(this).stream().filter(a -> a.getClass().equals(clazz)).map(clazz::cast).findAny().orElse(null);
 	}
 
 	public boolean hasElement(Element element) {
@@ -112,6 +121,7 @@ public abstract class User {
 	public abstract Ability selectedAbility();
 	public abstract Location location();
 	public abstract Location eyeLocation();
+	public abstract Location handLocation();
 	public abstract Block locBlock();
 	public abstract Block headBlock();
 	public abstract Vector direction();

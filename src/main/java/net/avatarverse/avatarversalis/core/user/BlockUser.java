@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.temporary.Cooldown;
+import net.avatarverse.avatarversalis.util.Blocks;
 
 import lombok.Getter;
 
@@ -66,11 +67,16 @@ public class BlockUser extends User {
 
 	@Override
 	public Location location() {
-		return block.getLocation();
+		return Blocks.center(block);
 	}
 
 	@Override
 	public Location eyeLocation() {
+		return location();
+	}
+
+	@Override
+	public Location handLocation() {
 		return location();
 	}
 

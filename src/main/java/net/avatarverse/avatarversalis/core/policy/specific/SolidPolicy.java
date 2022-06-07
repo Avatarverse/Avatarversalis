@@ -23,6 +23,10 @@ public class SolidPolicy implements EndingPolicy {
 	private final Supplier<Vector> direction;
 	private final Predicate<Location> condition;
 
+	public static SolidPolicy of(Supplier<Location> location) {
+		return new SolidPolicy(location, Vector::new, null);
+	}
+
 	public static SolidPolicy of(Supplier<Location> location, Supplier<Vector> direction) {
 		return new SolidPolicy(location, direction, null);
 	}

@@ -52,6 +52,11 @@ public class EntityUser extends User {
 	}
 
 	@Override
+	public Location handLocation() {
+		return location();
+	}
+
+	@Override
 	public Block locBlock() {
 		return location().getBlock();
 	}

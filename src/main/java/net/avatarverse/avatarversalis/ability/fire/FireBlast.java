@@ -45,7 +45,7 @@ public class FireBlast extends AbilityInstance {
 
 		location = user.eyeLocation();
 		direction = user.direction().clone().multiply(config.speed);
-		fire = Particles.fire().count(6).offset(config.particleRadius);
+		fire = Particles.fire(user).count(6).offset(config.particleRadius);
 		sound = Sounds.fire();
 		effects = Effects.by(user, this)
 				.damage(config.damage)
@@ -88,27 +88,17 @@ public class FireBlast extends AbilityInstance {
 		return true;
 	}
 
-	@Override
-	protected void cleanup() {}
-
+	@Getter
 	private static class Config extends AbilityConfig {
 
-		@Modifiable(Attribute.COOLDOWN)
-		@Getter public long cooldown;
-		@Modifiable(Attribute.DAMAGE)
-		@Getter public double damage;
-		@Modifiable(Attribute.RANGE)
-		@Getter public double range;
-		@Modifiable(Attribute.SPEED)
-		@Getter public double speed;
-		@Modifiable(Attribute.FIRE_TICKS)
-		@Getter public int fireTicks;
-		@Modifiable(Attribute.RADIUS)
-		@Getter public double hitRadius;
-		@Modifiable(Attribute.RADIUS)
-		@Getter public double particleRadius;
-		@Modifiable(Attribute.RADIUS)
-		@Getter public double igniteBlockRadius;
+		@Modifiable(Attribute.COOLDOWN) public long cooldown;
+		@Modifiable(Attribute.DAMAGE) public double damage;
+		@Modifiable(Attribute.RANGE) public double range;
+		@Modifiable(Attribute.SPEED) public double speed;
+		@Modifiable(Attribute.FIRE_TICKS) public int fireTicks;
+		@Modifiable(Attribute.RADIUS) public double hitRadius;
+		@Modifiable(Attribute.RADIUS) public double particleRadius;
+		@Modifiable(Attribute.RADIUS) public double igniteBlockRadius;
 
 		@Override
 		public void onLoad() {

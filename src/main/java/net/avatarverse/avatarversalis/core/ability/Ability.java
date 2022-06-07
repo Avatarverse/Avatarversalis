@@ -7,22 +7,22 @@ import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.element.Element;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Represents static ability information, as opposed to an instance of the ability.
  * Building an Ability automatically adds it to the AbilityManager collections.
  */
-@Data
+@Getter
 public class Ability {
 
 	private final String name, description, instructions;
-	private @Nullable String author, version;
+	private final @Nullable String author, version;
 	private final Element element;
 	private final Map<Activation, Class<? extends AbilityInstance>> activations;
 	private final Map<Class<? extends AbilityInstance>, Activation> controls;
-	private final boolean bindable, hidden;
+	private final boolean bindable, hidden, passive;
 
 	private Ability(Builder builder) {
 		this.name = builder.name;
@@ -33,6 +33,7 @@ public class Ability {
 		this.controls = builder.controls;
 		this.bindable = builder.bindable;
 		this.hidden = builder.hidden;
+		this.passive = builder.passive;
 
 		this.author = builder.author;
 		this.version = builder.version;
@@ -61,7 +62,7 @@ public class Ability {
 		private String description, instructions, author, version;
 		private final Map<Activation, Class<? extends AbilityInstance>> activations = new HashMap<>();
 		private final Map<Class<? extends AbilityInstance>, Activation> controls = new HashMap<>();
-		private boolean bindable, hidden;
+		private boolean bindable, hidden, passive;
 
 		public Builder description(String description) {
 			this.description = description;
@@ -90,6 +91,11 @@ public class Ability {
 
 		public Builder hidden() {
 			this.hidden = true;
+			return this;
+		}
+
+		public Builder passive() {
+			this.passive = true;
 			return this;
 		}
 

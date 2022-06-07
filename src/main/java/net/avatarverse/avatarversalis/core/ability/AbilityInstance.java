@@ -23,7 +23,7 @@ public abstract class AbilityInstance {
 	@Setter(AccessLevel.PACKAGE) protected User user;
 	protected final Ability ability;
 	protected final Set<AttributeModifier> modifiers;
-	protected final long startTime;
+	@Getter(AccessLevel.NONE) protected long startTime;
 
 	public AbilityInstance(User user) {
 		this.user = user;
@@ -32,10 +32,6 @@ public abstract class AbilityInstance {
 
 		addBaseModifiers();
 		load();
-
-		this.startTime = System.currentTimeMillis();
-		start();
-		postStart();
 	}
 
 	private void addBaseModifiers() {
@@ -51,6 +47,8 @@ public abstract class AbilityInstance {
 		if (new AbilityStartEvent(user, this).call().isCancelled()) return;
 		AbilityManager.INSTANCES.add(this);
 		AbilityManager.INSTANCES_BY_USER.get(user).add(this);
+		this.startTime = System.currentTimeMillis();
+		postStart();
 	}
 
 	public final void end() {
@@ -62,7 +60,8 @@ public abstract class AbilityInstance {
 	protected abstract void load();
 	protected abstract void postStart();
 	protected abstract boolean update();
-	protected abstract void cleanup();
+
+	protected void cleanup() {}
 
 	protected void onAttack() {}
 	protected void onInteract() {}
