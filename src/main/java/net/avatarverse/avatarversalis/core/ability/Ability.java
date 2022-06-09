@@ -1,10 +1,14 @@
 package net.avatarverse.avatarversalis.core.ability;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.avatarverse.avatarversalis.core.ability.combo.ComboStep;
 import net.avatarverse.avatarversalis.core.element.Element;
 
 import lombok.Getter;
@@ -22,7 +26,8 @@ public class Ability {
 	private final Element element;
 	private final Map<Activation, Class<? extends AbilityInstance>> activations;
 	private final Map<Class<? extends AbilityInstance>, Activation> controls;
-	private final boolean bindable, hidden, passive;
+	private final List<ComboStep> comboSteps;
+	private final boolean bindable, hidden, combo, passive;
 
 	private Ability(Builder builder) {
 		this.name = builder.name;
@@ -31,8 +36,10 @@ public class Ability {
 		this.element = builder.element;
 		this.activations = builder.activations;
 		this.controls = builder.controls;
+		this.comboSteps = builder.comboSteps;
 		this.bindable = builder.bindable;
 		this.hidden = builder.hidden;
+		this.combo = builder.combo;
 		this.passive = builder.passive;
 
 		this.author = builder.author;
@@ -62,7 +69,8 @@ public class Ability {
 		private String description, instructions, author, version;
 		private final Map<Activation, Class<? extends AbilityInstance>> activations = new HashMap<>();
 		private final Map<Class<? extends AbilityInstance>, Activation> controls = new HashMap<>();
-		private boolean bindable, hidden, passive;
+		private final List<ComboStep> comboSteps = new ArrayList<>();
+		private boolean bindable, hidden, combo, passive;
 
 		public Builder description(String description) {
 			this.description = description;
@@ -91,6 +99,13 @@ public class Ability {
 
 		public Builder hidden() {
 			this.hidden = true;
+			return this;
+		}
+
+		public Builder combo(ComboStep... steps) {
+			this.combo = true;
+			comboSteps.clear();
+			comboSteps.addAll(Arrays.asList(steps));
 			return this;
 		}
 

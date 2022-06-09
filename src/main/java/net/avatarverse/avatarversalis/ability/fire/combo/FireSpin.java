@@ -1,6 +1,5 @@
-package net.avatarverse.avatarversalis.ability.fire;
+package net.avatarverse.avatarversalis.ability.fire.combo;
 
-import org.bukkit.Location;
 import org.spongepowered.configurate.ConfigurationNode;
 
 import net.avatarverse.avatarversalis.config.AbilityConfig;
@@ -9,38 +8,32 @@ import net.avatarverse.avatarversalis.core.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.policy.Policies;
-import net.avatarverse.avatarversalis.core.policy.specific.ExpirationPolicy;
-import net.avatarverse.avatarversalis.core.policy.specific.LiquidPolicy;
-import net.avatarverse.avatarversalis.core.policy.specific.SolidPolicy;
 import net.avatarverse.avatarversalis.core.user.User;
+import net.avatarverse.avatarversalis.util.Blocks;
 import net.avatarverse.avatarversalis.util.Particles;
 import net.avatarverse.avatarversalis.util.Sounds;
 
 import lombok.Getter;
 
-@Getter
-public class Illumination extends AbilityInstance {
+public class FireSpin extends AbilityInstance {
 
 	private static final Config CONFIG = new Config();
 
 	private Config config;
-	private final EndingPolicy policy;
+	private EndingPolicy policy;
 
-	private Location location;
-	private final Particles fire;
-	private final Sounds sound;
+	private Particles fire;
+	private Sounds sound;
 
-	public Illumination(User user) {
+	public FireSpin(User user) {
 		super(user);
 
-		location = user.handLocation();
-		fire = Particles.fire(user);
-		sound = Sounds.fire().volume(0.2F);
+		if (Blocks.liquid(user.locBlock())) return;
 
-		policy = Policies.builder()
-				.add(ExpirationPolicy.of(config.duration))
-				.add(SolidPolicy.of(() -> location))
-				.add(LiquidPolicy.of(() -> location)).build();
+		fire = Particles.fire(user);
+		sound = Sounds.fire();
+
+		policy = Policies.builder().build();
 
 		start();
 	}
@@ -58,29 +51,28 @@ public class Illumination extends AbilityInstance {
 	@Override
 	protected boolean update() {
 		if (policy.test(user)) return false;
-		location = user.handLocation();
-		fire.spawn(location);
-		sound.play(location, 0.25);
-		return true;
-	}
 
-	@Override
-	public void onAttack() {
-		end();
+		return true;
 	}
 
 	@Getter
 	private static class Config extends AbilityConfig {
 
 		@Modifiable(Attribute.COOLDOWN) private long cooldown;
-		@Modifiable(Attribute.DURATION) private long duration;
+		@Modifiable(Attribute.DAMAGE) private double damage;
+		@Modifiable(Attribute.RANGE) private double range;
+		@Modifiable(Attribute.SPEED) private double speed;
+		@Modifiable(Attribute.KNOCKBACK) private double knockback;
 
 		@Override
 		public void onLoad() {
-			ConfigurationNode ability = root.node("abilities", "fire", "Illumination");
+			ConfigurationNode ability = root.node("abilities", "fire", "combo", "FireSpin");
 
 			cooldown = ability.node("cooldown").getLong();
-			duration = ability.node("duration").getLong();
+			damage = ability.node("damage").getDouble();
+			range = ability.node("range").getDouble();
+			speed = ability.node("speed").getDouble();
+			knockback = ability.node("knockback").getDouble();
 		}
 	}
 }

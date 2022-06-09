@@ -17,6 +17,8 @@ public enum Attribute {
 	COOLDOWN("Cooldown"),
 	DURATION("Duration"),
 	SPEED("Speed"),
+	KNOCKBACK("Knockback"),
+	KNOCKUP("Knockup"),
 	CHARGE_TIME("ChargeTime"),
 	RADIUS("Radius"),
 	HEIGHT("Height"),

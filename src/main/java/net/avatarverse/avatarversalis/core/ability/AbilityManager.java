@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import net.avatarverse.avatarversalis.ability.fire.FireBlast;
 import net.avatarverse.avatarversalis.ability.fire.FireBlastCharged;
 import net.avatarverse.avatarversalis.ability.fire.Illumination;
+import net.avatarverse.avatarversalis.core.ability.combo.ComboStep;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.util.Scheduler;
@@ -46,15 +47,25 @@ public final class AbilityManager {
 	}
 
 	private void registerCoreAbilities() {
-		Ability.builder("Illumination", Element.FIRE)
-				.activation(Activation.ATTACK, Illumination.class)
-				.control(Illumination.class, Activation.ATTACK)
-				.bindable().build();
+		// FIRE
+
+		// FireBlast
 		Ability.builder("FireBlast", Element.FIRE)
 				.activation(Activation.ATTACK, FireBlast.class)
 				.activation(Activation.SNEAK, FireBlastCharged.class)
 				.control(FireBlastCharged.class, Activation.SNEAK_RELEASE)
 				.bindable().build();
+		// Illumination
+		Ability.builder("Illumination", Element.FIRE)
+				.activation(Activation.ATTACK, Illumination.class)
+				.control(Illumination.class, Activation.ATTACK)
+				.bindable().build();
+		// FireBlade
+		Ability.builder("FireBlade", Element.FIRE)
+				.combo(new ComboStep("FireBlast", Activation.ATTACK),
+						new ComboStep("FireBlast", Activation.ATTACK),
+						new ComboStep("FireBlast", Activation.SNEAK),
+						new ComboStep("FireBlast", Activation.ATTACK)).build();
 	}
 
 	private void registerAddonAbilities() {

@@ -2,7 +2,7 @@ package net.avatarverse.avatarversalis.ability.fire;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurationNode;
 
 import net.avatarverse.avatarversalis.config.AbilityConfig;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
@@ -111,8 +111,7 @@ public class FireBlastCharged extends AbilityInstance {
 		location = user.eyeLocation();
 		direction = user.direction().clone().multiply(config.speed);
 		fire.count(5).offset(0.5);
-		policy.remove(SolidPolicy.class).add(RangePolicy.of(config.range, user.location(), () -> location))
-				.remove(SolidPolicy.class);
+		policy.remove(SolidPolicy.class).add(RangePolicy.of(config.range, user.location(), () -> location));
 		user.addCooldown(ability, config.cooldown);
 	}
 
@@ -136,7 +135,7 @@ public class FireBlastCharged extends AbilityInstance {
 
 		@Override
 		public void onLoad() {
-			CommentedConfigurationNode ability = root.node("abilities", "fire", "FireBlast", "charged");
+			ConfigurationNode ability = root.node("abilities", "fire", "FireBlast", "charged");
 
 			cooldown = ability.node("cooldown").getLong();
 			chargeTime = ability.node("charge-time").getLong();
@@ -146,7 +145,7 @@ public class FireBlastCharged extends AbilityInstance {
 			fireTicks = ability.node("fire-ticks").getInt();
 			damageBlocks = ability.node("damage-blocks").getBoolean(false);
 
-			CommentedConfigurationNode radius = ability.node("radius");
+			ConfigurationNode radius = ability.node("radius");
 
 			hitRadius = radius.node("hit").getDouble();
 			particleRadius = radius.node("particle").getDouble();

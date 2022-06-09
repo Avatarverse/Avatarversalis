@@ -52,9 +52,11 @@ public abstract class AbilityInstance {
 	}
 
 	public final void end() {
-		AbilityManager.INSTANCES.remove(this);
-		AbilityManager.INSTANCES_BY_USER.get(user).remove(this);
-		cleanup();
+		if (AbilityManager.INSTANCES.contains(this)) {
+			AbilityManager.INSTANCES.remove(this);
+			AbilityManager.INSTANCES_BY_USER.get(user).remove(this);
+			cleanup();
+		}
 	}
 
 	protected abstract void load();

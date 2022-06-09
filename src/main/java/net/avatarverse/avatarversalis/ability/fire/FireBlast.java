@@ -91,14 +91,14 @@ public class FireBlast extends AbilityInstance {
 	@Getter
 	private static class Config extends AbilityConfig {
 
-		@Modifiable(Attribute.COOLDOWN) public long cooldown;
-		@Modifiable(Attribute.DAMAGE) public double damage;
-		@Modifiable(Attribute.RANGE) public double range;
-		@Modifiable(Attribute.SPEED) public double speed;
-		@Modifiable(Attribute.FIRE_TICKS) public int fireTicks;
-		@Modifiable(Attribute.RADIUS) public double hitRadius;
-		@Modifiable(Attribute.RADIUS) public double particleRadius;
-		@Modifiable(Attribute.RADIUS) public double igniteBlockRadius;
+		@Modifiable(Attribute.COOLDOWN) private long cooldown;
+		@Modifiable(Attribute.DAMAGE) private double damage;
+		@Modifiable(Attribute.RANGE) private double range;
+		@Modifiable(Attribute.SPEED) private double speed;
+		@Modifiable(Attribute.FIRE_TICKS) private int fireTicks;
+		@Modifiable(Attribute.RADIUS) private double hitRadius;
+		@Modifiable(Attribute.RADIUS) private double particleRadius;
+		@Modifiable(Attribute.RADIUS) private double igniteBlockRadius;
 
 		@Override
 		public void onLoad() {
