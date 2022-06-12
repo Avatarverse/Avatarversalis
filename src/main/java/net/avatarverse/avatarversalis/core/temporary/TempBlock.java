@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.temporary;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -14,9 +15,13 @@ import net.jodah.expiringmap.ExpirationListener;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
+@Getter
 public class TempBlock implements Revertible {
 
 	private static final ExpiringMap<Block, TempBlock> INSTANCES = ExpiringMap.builder()
@@ -25,11 +30,11 @@ public class TempBlock implements Revertible {
 			.expirationListener((ExpirationListener<Block, TempBlock>) (b, tb) -> tb.revert())
 			.build();
 
-	@Getter private final Block block;
-	@Getter private AbilityInstance ability;
-	@Getter private Set<Element> bendableElements;
-	@Getter private BlockData newData;
-	@Getter private boolean reverted = false;
+	private final Block block;
+	private AbilityInstance ability;
+	private Set<Element> bendableElements;
+	private BlockData newData;
+	private boolean reverted = false;
 
 	private TempBlock(Builder builder) {
 		this.block = builder.block;

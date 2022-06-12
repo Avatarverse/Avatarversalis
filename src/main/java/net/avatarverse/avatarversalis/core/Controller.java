@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import net.avatarverse.avatarversalis.Avatarversalis;
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.ability.Activation;
@@ -25,23 +25,31 @@ import net.avatarverse.avatarversalis.event.WorldSunsetEvent;
 public class Controller implements Listener {
 
 	public void activate(User user, Activation activation) {
+		// perform activation method on each active instance if applicable
+		for (AbilityInstance instance : user.activeInstances())
+			for (Entry<Class<? extends AbilityInstance>, Set<Activation>> control : instance.ability().controls().entrySet())
+				if (control.getKey().equals(instance.getClass()) && control.getValue().contains(activation))
+					activation.method().accept(instance);
+
 		Ability ability = user.selectedAbility();
-		if (ability == null || !user.canBend(ability))
-			return;
-		if (!ability.activations().containsKey(activation)) {
-			Set<Class<? extends AbilityInstance>> relevantClasses = ability.controls().entrySet().stream()
-					.filter(e -> e.getValue() == activation)
-					.map(Entry::getKey)
-					.collect(Collectors.toSet());
-			user.activeInstances().stream()
-					.filter(ai -> relevantClasses.contains(ai.getClass()))
-					.forEach(activation.method());
-			return;
-		}
+		if (ability == null) return;
+		activate(user, ability, activation);
+	}
+
+	public void activate(User user, Ability ability, Activation activation) {
+		if (!user.canBend(ability)) return;
+		Avatarversalis.game().comboManager().addStep(user, ability, activation);
+		if (ability.combo() && activation == Activation.COMBO)
+			instantiate(user, ability.activations().get(Activation.COMBO));
+		else if (ability.activations().containsKey(activation))
+			instantiate(user, ability.activations().get(activation));
+	}
+
+	private void instantiate(User user, Class<? extends AbilityInstance> clazz) {
 		try {
-			ability.activations().get(activation).getDeclaredConstructor(User.class).newInstance(user);
-		} catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-			e.printStackTrace();
+			clazz.getDeclaredConstructor(User.class).newInstance(user);
+		} catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+			e.printStackTrace(); // TODO
 		}
 	}
 

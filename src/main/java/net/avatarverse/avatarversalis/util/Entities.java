@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.util;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.function.Predicate;
 
@@ -12,10 +13,14 @@ import org.jetbrains.annotations.Nullable;
 import net.avatarverse.avatarversalis.core.user.EntityUser;
 import net.avatarverse.avatarversalis.core.user.User;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class Entities {
 
 	public static Predicate<Entity> canBuild(Block block) {
-		return e -> true;
+		return e -> true; // TODO
 	}
 
 	public static Predicate<Entity> excludeUser(User user) {

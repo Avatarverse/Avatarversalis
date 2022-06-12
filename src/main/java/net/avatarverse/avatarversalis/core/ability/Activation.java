@@ -16,7 +16,8 @@ public enum Activation {
 	SNEAK_RELEASE(AbilityInstance::onSneakRelease),
 	FALL(AbilityInstance::onFall),
 	SUNRISE(AbilityInstance::onSunrise),
-	SUNSET(AbilityInstance::onSunset);
+	SUNSET(AbilityInstance::onSunset),
+	COMBO(null);
 
 	@Getter private final Consumer<AbilityInstance> method;
 

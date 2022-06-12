@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.element;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -12,10 +13,13 @@ import com.google.common.collect.ImmutableSet;
 import net.avatarverse.avatarversalis.util.Colors;
 import net.md_5.bungee.api.ChatColor;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Element {
 

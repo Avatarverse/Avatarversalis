@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.user;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,17 +22,21 @@ import net.avatarverse.avatarversalis.core.ability.AbilityManager;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.temporary.Cooldown;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 import lombok.Setter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
+@Getter
 public abstract class User {
 
 	public static final Map<UUID, User> USERS = new HashMap<>();
 	public static final Map<Block, BlockUser> BLOCK_USERS = new HashMap<>();
 
-	@Getter protected final UUID uuid;
-	@Getter @Setter private boolean toggled;
-	@Getter private final Map<Element, Boolean> elements; // <Element, Toggled?>
+	protected final UUID uuid;
+	@Setter private boolean toggled;
+	private final Map<Element, Boolean> elements; // <Element, Toggled?>
 
 	public User(UUID uuid) {
 		this.uuid = uuid;
@@ -59,7 +64,7 @@ public abstract class User {
 		return AbilityManager.INSTANCES_BY_USER.get(this).stream().filter(a -> a.getClass().equals(clazz)).map(clazz::cast).collect(Collectors.toSet());
 	}
 
-	public <T extends AbilityInstance> T activeInstance(Class<T> clazz) {
+	public @Nullable <T extends AbilityInstance> T activeInstance(Class<T> clazz) {
 		return AbilityManager.INSTANCES_BY_USER.get(this).stream().filter(a -> a.getClass().equals(clazz)).map(clazz::cast).findAny().orElse(null);
 	}
 
@@ -95,7 +100,7 @@ public abstract class User {
 		addCooldown(ability.name(), cooldown, null);
 	}
 
-	public void addCooldown(Ability ability, long cooldown, Runnable endTask) {
+	public void addCooldown(Ability ability, long cooldown, @Nullable Runnable endTask) {
 		addCooldown(ability.name(), cooldown, endTask);
 	}
 
@@ -103,7 +108,7 @@ public abstract class User {
 		addCooldown(ability, cooldown, null);
 	}
 
-	public void addCooldown(String ability, long cooldown, Runnable endTask) {
+	public void addCooldown(String ability, long cooldown, @Nullable Runnable endTask) {
 		Cooldown.of(this, ability, cooldown, endTask);
 	}
 
@@ -118,7 +123,7 @@ public abstract class User {
 
 	public abstract boolean canBend(Ability ability);
 	public abstract int currentSlot();
-	public abstract Ability selectedAbility();
+	public abstract @Nullable Ability selectedAbility();
 	public abstract Location location();
 	public abstract Location eyeLocation();
 	public abstract Location handLocation();

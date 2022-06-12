@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.util;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,10 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import net.avatarverse.avatarversalis.Avatarversalis;
 import net.avatarverse.avatarversalis.util.Geometry.Axis;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class Blocks {
 
 	public static List<Material> earthbendables;

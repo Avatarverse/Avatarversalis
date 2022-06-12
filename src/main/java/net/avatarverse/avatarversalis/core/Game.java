@@ -1,7 +1,7 @@
 package net.avatarverse.avatarversalis.core;
 
 import net.avatarverse.avatarversalis.core.ability.AbilityManager;
-import net.avatarverse.avatarversalis.core.ability.combo.ComboManager;
+import net.avatarverse.avatarversalis.core.ability.ComboManager;
 import net.avatarverse.avatarversalis.core.board.BendingBoardManager;
 import net.avatarverse.avatarversalis.core.temporary.CooldownManager;
 import net.avatarverse.avatarversalis.util.Listeners;

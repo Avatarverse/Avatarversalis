@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 import net.avatarverse.avatarversalis.ability.fire.FireBlast;
 import net.avatarverse.avatarversalis.ability.fire.FireBlastCharged;
 import net.avatarverse.avatarversalis.ability.fire.Illumination;
-import net.avatarverse.avatarversalis.core.ability.combo.ComboStep;
+import net.avatarverse.avatarversalis.ability.fire.combo.FireBlade;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.util.Scheduler;
@@ -23,6 +23,7 @@ public final class AbilityManager {
 
 	static final Map<String, Ability> ABILITIES_BY_NAME = new HashMap<>();
 	static final Map<Class<? extends AbilityInstance>, Ability> ABILITIES_BY_CLASS = new HashMap<>();
+	static final Set<Ability> COMBOS = new HashSet<>();
 
 	static final Set<AbilityInstance> INSTANCES = new HashSet<>();
 	public static final Map<User, Set<AbilityInstance>> INSTANCES_BY_USER = new HashMap<>();
@@ -62,7 +63,8 @@ public final class AbilityManager {
 				.bindable().build();
 		// FireBlade
 		Ability.builder("FireBlade", Element.FIRE)
-				.combo(new ComboStep("FireBlast", Activation.ATTACK),
+				.combo(FireBlade.class,
+						new ComboStep("FireBlast", Activation.ATTACK),
 						new ComboStep("FireBlast", Activation.ATTACK),
 						new ComboStep("FireBlast", Activation.SNEAK),
 						new ComboStep("FireBlast", Activation.ATTACK)).build();

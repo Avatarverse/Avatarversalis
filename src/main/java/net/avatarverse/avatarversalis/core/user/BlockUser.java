@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.user;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -8,14 +9,18 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.temporary.Cooldown;
 import net.avatarverse.avatarversalis.util.Blocks;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public class BlockUser extends User {
 
 	@Getter private final Block block;
@@ -46,7 +51,7 @@ public class BlockUser extends User {
 	}
 
 	@Override
-	public @Nullable Cooldown cooldown(Ability ability) {
+	public @Nullable Cooldown cooldown(@NotNull Ability ability) {
 		return null;
 	}
 

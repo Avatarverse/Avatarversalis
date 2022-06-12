@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.user;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.util.Geometry;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public class AvatarPlayer extends LivingEntityUser {
 
 	private static final Map<Integer, Ability> BINDS = new HashMap<>();

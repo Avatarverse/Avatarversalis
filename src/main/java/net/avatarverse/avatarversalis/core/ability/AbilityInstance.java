@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.ability;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import net.avatarverse.avatarversalis.core.element.water.Water;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.event.AbilityStartEvent;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +19,8 @@ import lombok.Setter;
 /**
  * An actual instance of an Ability. Individual abilities should extend this class.
  */
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 @Getter
 public abstract class AbilityInstance {
 

@@ -1,13 +1,18 @@
 package net.avatarverse.avatarversalis.core.user;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.util.Geometry;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public class LivingEntityUser extends EntityUser {
 
 	@Getter private final LivingEntity entity;

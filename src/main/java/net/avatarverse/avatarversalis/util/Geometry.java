@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.util;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
 import org.bukkit.Location;
@@ -7,6 +8,10 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.util.Vector;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class Geometry {
 
 	public enum Axis {
@@ -23,10 +28,10 @@ public final class Geometry {
 				isWall.test(block.getRelative(Blocks.faceFromVector(direction, Axis.Y))),
 				isWall.test(block.getRelative(Blocks.faceFromVector(direction, Axis.Z)))
 		};
-		boolean xz = nearbyWall[0] && nearbyWall[2];
 		boolean xy = nearbyWall[0] && nearbyWall[1];
+		boolean xz = nearbyWall[0] && nearbyWall[2];
 		boolean yz = nearbyWall[1] && nearbyWall[2];
-		return xz || xy || yz;
+		return xy || xz || yz;
 	}
 
 	public static Location left(Location location, double distance) {

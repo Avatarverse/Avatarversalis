@@ -17,7 +17,7 @@ public class CompositeEndingPolicy implements EndingPolicy {
 		return this;
 	}
 
-	public <T extends EndingPolicy> CompositeEndingPolicy remove(Class<T> clazz) {
+	public CompositeEndingPolicy remove(Class<? extends EndingPolicy> clazz) {
 		policies.removeIf(policy -> policy.getClass().equals(clazz));
 		return this;
 	}

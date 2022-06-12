@@ -15,10 +15,10 @@ import lombok.Getter;
 
 public class Avatarversalis extends JavaPlugin {
 
-	public static Avatarversalis plugin;
-	public static Logger log;
-	@Getter public static Game game;
-	@Getter public static ConfigManager configManager;
+	@Getter private static Avatarversalis plugin;
+	@Getter private static Logger log;
+	@Getter private static ConfigManager configManager;
+	@Getter private static Game game;
 	private Set<Listener> listeners;
 
 	@Override

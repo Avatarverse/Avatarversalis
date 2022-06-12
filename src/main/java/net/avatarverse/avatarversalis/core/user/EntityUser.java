@@ -1,5 +1,7 @@
 package net.avatarverse.avatarversalis.core.user;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -10,8 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.temporary.Cooldown;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public class EntityUser extends User {
 
 	@Getter private final Entity entity;
@@ -37,7 +42,7 @@ public class EntityUser extends User {
 	}
 
 	@Override
-	public Ability selectedAbility() {
+	public @Nullable Ability selectedAbility() {
 		return null;
 	}
 

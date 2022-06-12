@@ -1,16 +1,19 @@
 package net.avatarverse.avatarversalis.core.ability;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.avatarverse.avatarversalis.core.ability.combo.ComboStep;
 import net.avatarverse.avatarversalis.core.element.Element;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
  * Represents static ability information, as opposed to an instance of the ability.
  * Building an Ability automatically adds it to the AbilityManager collections.
  */
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 @Getter
 public class Ability {
 
@@ -25,7 +30,7 @@ public class Ability {
 	private final @Nullable String author, version;
 	private final Element element;
 	private final Map<Activation, Class<? extends AbilityInstance>> activations;
-	private final Map<Class<? extends AbilityInstance>, Activation> controls;
+	private final Map<Class<? extends AbilityInstance>, Set<Activation>> controls;
 	private final List<ComboStep> comboSteps;
 	private final boolean bindable, hidden, combo, passive;
 
@@ -47,6 +52,8 @@ public class Ability {
 
 		AbilityManager.ABILITIES_BY_NAME.put(name, this);
 		activations.values().forEach(clazz -> AbilityManager.ABILITIES_BY_CLASS.put(clazz, this));
+		if (combo)
+			AbilityManager.COMBOS.add(this);
 	}
 
 	public static @Nullable Ability byName(String name) {
@@ -68,7 +75,7 @@ public class Ability {
 		private final Element element;
 		private String description, instructions, author, version;
 		private final Map<Activation, Class<? extends AbilityInstance>> activations = new HashMap<>();
-		private final Map<Class<? extends AbilityInstance>, Activation> controls = new HashMap<>();
+		private final Map<Class<? extends AbilityInstance>, Set<Activation>> controls = new HashMap<>();
 		private final List<ComboStep> comboSteps = new ArrayList<>();
 		private boolean bindable, hidden, combo, passive;
 
@@ -87,8 +94,9 @@ public class Ability {
 			return this;
 		}
 
-		public <T extends AbilityInstance> Builder control(Class<T> ability, Activation activation) {
-			this.controls.put(ability, activation);
+		public <T extends AbilityInstance> Builder control(Class<T> ability, Activation... activations) {
+			this.controls.putIfAbsent(ability, new HashSet<>());
+			this.controls.get(ability).addAll(Arrays.asList(activations));
 			return this;
 		}
 
@@ -102,11 +110,11 @@ public class Ability {
 			return this;
 		}
 
-		public Builder combo(ComboStep... steps) {
+		public Builder combo(Class<? extends AbilityInstance> ability, ComboStep... steps) {
 			this.combo = true;
 			comboSteps.clear();
 			comboSteps.addAll(Arrays.asList(steps));
-			return this;
+			return activation(Activation.COMBO, ability);
 		}
 
 		public Builder passive() {
@@ -127,6 +135,10 @@ public class Ability {
 		public Ability build() {
 			if (description == null || instructions == null) {
 				// load from config
+			}
+			if (combo && (bindable || passive)) {
+				bindable = false;
+				passive = false;
 			}
 			return new Ability(this);
 		}

@@ -1,12 +1,12 @@
 package net.avatarverse.avatarversalis.event;
 
-import net.avatarverse.avatarversalis.core.user.User;
+import org.bukkit.World;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public abstract class UserEvent extends BendingEvent {
-	protected final User user;
+public abstract class WorldBendingEvent extends BendingEvent {
+	protected final World world;
 }

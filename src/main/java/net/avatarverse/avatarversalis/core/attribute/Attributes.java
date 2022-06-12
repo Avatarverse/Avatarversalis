@@ -1,10 +1,18 @@
 package net.avatarverse.avatarversalis.core.attribute;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.avatarverse.avatarversalis.util.Pair;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class Attributes {
 
-	public static Pair<ModifierOperation, Double> parseExpression(String expression) {
+	public static @Nullable Pair<ModifierOperation, Double> parseExpression(String expression) {
 		if (expression.length() < 2) return null;
 
 		String number = expression.substring(1);

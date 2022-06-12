@@ -1,18 +1,23 @@
 package net.avatarverse.avatarversalis.event;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.event.Cancellable;
 
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.user.User;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.Getter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 @Getter
 public abstract class AbilityEvent extends UserEvent implements Cancellable {
 
-	private final AbilityInstance ability;
+	protected final AbilityInstance ability;
 
-	private boolean cancelled = false;
+	protected boolean cancelled = false;
 
 	public AbilityEvent(User user, AbilityInstance ability) {
 		super(user);

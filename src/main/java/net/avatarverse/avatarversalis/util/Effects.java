@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.util;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import org.bukkit.entity.Entity;
@@ -12,11 +13,14 @@ import net.avatarverse.avatarversalis.core.user.EntityUser;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.event.AbilityAffectEntityEvent;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public final class Effects {

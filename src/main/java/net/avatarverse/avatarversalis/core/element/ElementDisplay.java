@@ -2,10 +2,10 @@ package net.avatarverse.avatarversalis.core.element;
 
 import net.md_5.bungee.api.ChatColor;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Data
 public class ElementDisplay {
 	private final String noun, verb, user;

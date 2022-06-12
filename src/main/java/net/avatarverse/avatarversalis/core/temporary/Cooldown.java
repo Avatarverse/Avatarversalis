@@ -1,5 +1,6 @@
 package net.avatarverse.avatarversalis.core.temporary;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -13,10 +14,13 @@ import net.jodah.expiringmap.ExpirationListener;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 @Data
 public class Cooldown implements Revertible {
 
@@ -32,7 +36,7 @@ public class Cooldown implements Revertible {
 		this.ability = ability;
 		this.endTask = endTask;
 
-		userMap(uuid).put(ability, this, duration, TimeUnit.MILLISECONDS);
+		COOLDOWNS.computeIfAbsent(uuid, this::newMap).put(ability, this, duration, TimeUnit.MILLISECONDS);
 	}
 
 	public boolean remove() {
@@ -48,12 +52,11 @@ public class Cooldown implements Revertible {
 		}
 	}
 
-	private ExpiringMap<String, Cooldown> userMap(UUID uuid) {
-		return COOLDOWNS.putIfAbsent(uuid, ExpiringMap.builder()
-				.variableExpiration()
+	private ExpiringMap<String, Cooldown> newMap(UUID uuid) {
+		return ExpiringMap.builder().variableExpiration()
 				.expirationPolicy(ExpirationPolicy.CREATED)
 				.expirationListener((ExpirationListener<String, Cooldown>) (s, cooldown) -> cooldown.revert())
-				.build());
+				.build();
 	}
 
 	public static Cooldown of(User user, String ability, long duration, @Nullable Runnable endTask) {
