@@ -1,4 +1,4 @@
-package net.avatarverse.avatarversalis.util;
+package net.avatarverse.avatarversalis.locale;
 
 import net.md_5.bungee.api.ChatColor;
 

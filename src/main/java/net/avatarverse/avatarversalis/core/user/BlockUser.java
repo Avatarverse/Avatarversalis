@@ -56,6 +56,11 @@ public class BlockUser extends User {
 	}
 
 	@Override
+	public String name() {
+		return toString();
+	}
+
+	@Override
 	public boolean canBend(Ability ability) {
 		return false;
 	}
@@ -148,5 +153,10 @@ public class BlockUser extends User {
 	@Override
 	public boolean onGround() {
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BlockUser:{" + block.getWorld().getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ() + "}";
 	}
 }

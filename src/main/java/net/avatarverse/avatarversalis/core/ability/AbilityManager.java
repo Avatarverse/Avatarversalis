@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.bukkit.plugin.Plugin;
 
@@ -81,5 +82,9 @@ public final class AbilityManager {
 	 */
 	public static void registerPluginAbilities(Plugin plugin, String packageName) {
 
+	}
+
+	public static Stream<Ability> all() {
+		return ABILITIES_BY_NAME.values().stream();
 	}
 }

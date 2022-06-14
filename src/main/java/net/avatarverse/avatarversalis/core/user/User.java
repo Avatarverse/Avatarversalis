@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,12 +37,16 @@ public abstract class User {
 	public static final Map<Block, BlockUser> BLOCK_USERS = new HashMap<>();
 
 	protected final UUID uuid;
-	@Setter private boolean toggled;
-	private final Map<Element, Boolean> elements; // <Element, Toggled?>
+	@Setter protected boolean toggled;
+	protected final Map<Element, Boolean> elements; // <Element, Toggled?>
+	protected final Map<Integer, Ability> binds;
 
 	public User(UUID uuid) {
 		this.uuid = uuid;
-		this.elements = new HashMap<>();
+		this.elements = new ConcurrentHashMap<>();
+		this.binds = new ConcurrentHashMap<>();
+		for (int i = 0; i < 9; i++)
+			binds.put(i, null);
 		USERS.put(uuid, this);
 	}
 
@@ -48,8 +54,16 @@ public abstract class User {
 		return USERS.get(uuid);
 	}
 
+	public static @Nullable User byName(String name) {
+		return all().filter(u -> u.name().equals(name)).findAny().orElse(null);
+	}
+
 	public static @Nullable User byEntity(Entity entity) {
 		return USERS.get(entity.getUniqueId());
+	}
+
+	public static Stream<User> all() {
+		return USERS.values().stream();
 	}
 
 	public @Nullable <T extends User> T as(Class<T> clazz) {
@@ -80,8 +94,32 @@ public abstract class User {
 		Arrays.stream(elements).forEach(this.elements::remove);
 	}
 
+	public void clearElements() {
+		elements.clear();
+	}
+
+	public void toggle() {
+		toggled = !toggled;
+	}
+
+	public void toggleElement(Element element) {
+		toggleElement(element, !elements.get(element));
+	}
+
 	public void toggleElement(Element element, boolean toggled) {
 		elements.replace(element, toggled);
+	}
+
+	public boolean isElementToggled(Element element) {
+		return elements.getOrDefault(element, false);
+	}
+
+	public void bind(Ability ability, int slot) {
+		binds.put(slot, ability);
+	}
+
+	public void unbind(int slot) {
+		binds.put(slot, null);
 	}
 
 	public boolean isOnCooldown(Ability ability) {
@@ -121,6 +159,7 @@ public abstract class User {
 		return cooldown != null && cooldown.remove();
 	}
 
+	public abstract String name();
 	public abstract boolean canBend(Ability ability);
 	public abstract int currentSlot();
 	public abstract @Nullable Ability selectedAbility();

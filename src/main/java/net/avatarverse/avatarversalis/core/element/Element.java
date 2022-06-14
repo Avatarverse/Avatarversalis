@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.avatarverse.avatarversalis.util.Colors;
+import net.avatarverse.avatarversalis.locale.Colors;
+
 import net.md_5.bungee.api.ChatColor;
 
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
@@ -66,6 +70,22 @@ public class Element {
 
 		ELEMENTS.put(name, element);
 		return element;
+	}
+
+	public String name() {
+		return display.noun();
+	}
+
+	public static @Nullable Element byName(String name) {
+		return ELEMENTS.get(name);
+	}
+
+	public static Stream<String> names() {
+		return ELEMENTS.keySet().stream();
+	}
+
+	public static Stream<Element> all() {
+		return ELEMENTS.values().stream();
 	}
 
 	public boolean isOrInherits(Element other) {

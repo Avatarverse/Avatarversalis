@@ -32,6 +32,11 @@ public class EntityUser extends User {
 	}
 
 	@Override
+	public String name() {
+		return entity.getName();
+	}
+
+	@Override
 	public boolean canBend(Ability ability) {
 		return false;
 	}
