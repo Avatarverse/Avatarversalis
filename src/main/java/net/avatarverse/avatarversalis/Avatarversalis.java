@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spongepowered.configurate.ConfigurationNode;
 
 import net.avatarverse.avatarversalis.config.ConfigManager;
 import net.avatarverse.avatarversalis.core.Game;
@@ -147,6 +148,10 @@ public class Avatarversalis extends JavaPlugin {
 				throw new InvalidCommandArgument(); // TODO message
 			return preset;
 		});
+	}
+
+	public static ConfigurationNode config() {
+		return configManager.config();
 	}
 
 }

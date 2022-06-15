@@ -1,4 +1,4 @@
-package net.avatarverse.avatarversalis.locale;
+package net.avatarverse.avatarversalis.util.text;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
@@ -52,6 +52,9 @@ public interface Lang {
 	Message TOGGLE_OTHER_SUCCESS = translate("command.toggle.other", "Successfully toggled {0}'s bending.");
 	Message TOGGLE_OTHER_ELEMENT_SUCCESS = translate("command.toggle.other.element", "Successfully toggled {0}'s {1}.");
 
+	Message BOARD_TITLE = translate("scoreboard.title", "&lAbilities");
+	Message BOARD_EMPTY = translate("scoreboard.empty-slot", " ---- Slot {0} ---- ");
+
 	static Message translate(String key, String def) {
 		return new Message(BUNDLE.get(key).orElse(def));
 	}
@@ -79,6 +82,22 @@ public interface Lang {
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
+	static String bold(String message) {
+		return colorify("&l" + message);
+	}
+
+	static String italic(String message) {
+		return colorify("&o" + message);
+	}
+
+	static String underline(String message) {
+		return colorify("&n" + message);
+	}
+
+	static String strikethrough(String message) {
+		return colorify("&m" + message);
+	}
+
 	@RequiredArgsConstructor
 	class Message {
 		private final String translated;
@@ -88,7 +107,11 @@ public interface Lang {
 		}
 
 		public void send(CommandSender receiver, Object... args) {
-			receiver.sendMessage(format(translated, args));
+			receiver.sendMessage(asString(args));
+		}
+
+		public String asString(Object... args) {
+			return colorify(format(translated, args));
 		}
 	}
 

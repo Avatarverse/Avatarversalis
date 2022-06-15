@@ -34,6 +34,8 @@ public abstract class AbilityInstance {
 		this.ability = AbilityManager.ABILITIES_BY_CLASS.get(getClass());
 		this.modifiers = new HashSet<>();
 
+		if (!user.canBend(ability)) return;
+
 		addBaseModifiers();
 		load();
 	}

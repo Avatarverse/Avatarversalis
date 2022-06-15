@@ -10,6 +10,8 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import com.google.common.base.CaseFormat;
 
+import net.avatarverse.avatarversalis.util.Attributes;
+
 import lombok.Getter;
 
 public abstract class ModifierSet {

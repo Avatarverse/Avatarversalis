@@ -5,12 +5,13 @@ import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.Avatarversalis;
 import net.avatarverse.avatarversalis.core.ability.Ability;
+import net.avatarverse.avatarversalis.core.board.BendingBoardManager;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.user.AvatarPlayer;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.core.user.preset.Preset;
-import net.avatarverse.avatarversalis.locale.Lang;
-import net.avatarverse.avatarversalis.locale.Lang.Message;
+import net.avatarverse.avatarversalis.util.text.Lang;
+import net.avatarverse.avatarversalis.util.text.Lang.Message;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
@@ -86,8 +87,19 @@ public class BendingCommand extends BaseCommand {
 
 	@Subcommand("board|scoreboard|bo")
 	@CommandPermission("bending.command.board")
-	public void board(User self) {
-		// TODO when BendingBoard is complete
+	public void board(AvatarPlayer self) {
+		BendingBoardManager boardManager = Avatarversalis.game().boardManager();
+		if (!boardManager.enabled()) {
+			// TODO board is disabled message
+			return;
+		}
+		if (boardManager.enabled(self)) {
+			boardManager.disable(self);
+			// TODO board enabled msg
+		} else {
+			boardManager.enable(self);
+			// TODO board disabled msg
+		}
 	}
 
 	@Subcommand("choose|ch")

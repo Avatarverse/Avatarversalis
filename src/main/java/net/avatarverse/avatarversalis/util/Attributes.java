@@ -1,10 +1,10 @@
-package net.avatarverse.avatarversalis.core.attribute;
+package net.avatarverse.avatarversalis.util;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.avatarverse.avatarversalis.util.Pair;
+import net.avatarverse.avatarversalis.core.attribute.ModifierOperation;
 
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 

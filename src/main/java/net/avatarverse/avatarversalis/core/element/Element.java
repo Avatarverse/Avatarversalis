@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.avatarverse.avatarversalis.locale.Colors;
+import net.avatarverse.avatarversalis.util.text.Colors;
 
 import net.md_5.bungee.api.ChatColor;
 

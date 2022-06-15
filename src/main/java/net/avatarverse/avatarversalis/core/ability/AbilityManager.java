@@ -33,7 +33,7 @@ public final class AbilityManager {
 		registerCoreAbilities();
 		registerAddonAbilities();
 
-		Scheduler.repeat(this::update, 1);
+		Scheduler.repeat(this::update);
 	}
 
 	public void update() {
