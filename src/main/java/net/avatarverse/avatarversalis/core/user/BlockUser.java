@@ -1,29 +1,27 @@
 package net.avatarverse.avatarversalis.core.user;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import com.google.common.base.Preconditions;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
-import net.avatarverse.avatarversalis.core.temporary.Cooldown;
 import net.avatarverse.avatarversalis.util.Blocks;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.Getter;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public class BlockUser extends User {
 
 	@Getter private final Block block;
+	private int currentSlot;
 
 	private BlockUser(Block block) {
 		super(UUID.randomUUID());
@@ -32,13 +30,8 @@ public class BlockUser extends User {
 	}
 
 	public static BlockUser registerBlockUser(Block block) {
-		Validate.notNull(block, "Block cannot be null");
+		Preconditions.checkNotNull(block, "Block cannot be null");
 		return new BlockUser(block);
-	}
-
-	public static void unregisterBlockUser(Block block) {
-		Validate.notNull(block, "Block cannot be null");
-		Optional.ofNullable(of(block)).ifPresent(BlockUser::unregister);
 	}
 
 	public static @Nullable BlockUser of(Block block) {
@@ -48,11 +41,6 @@ public class BlockUser extends User {
 	public void unregister() {
 		USERS.remove(uuid);
 		BLOCK_USERS.remove(block);
-	}
-
-	@Override
-	public @Nullable Cooldown cooldown(@NotNull Ability ability) {
-		return null;
 	}
 
 	@Override
@@ -67,7 +55,12 @@ public class BlockUser extends User {
 
 	@Override
 	public int currentSlot() {
-		return 0;
+		return currentSlot;
+	}
+
+	@Override
+	public void currentSlot(int slot) {
+		this.currentSlot = slot;
 	}
 
 	@Override

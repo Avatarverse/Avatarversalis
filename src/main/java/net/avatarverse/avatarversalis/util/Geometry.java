@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.util;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
 import org.bukkit.Location;
@@ -8,10 +7,10 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.util.Vector;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public final class Geometry {
 
 	public enum Axis {

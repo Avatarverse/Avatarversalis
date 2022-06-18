@@ -1,12 +1,10 @@
 package net.avatarverse.avatarversalis.core.temporary;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.element.Element;
@@ -15,12 +13,13 @@ import net.jodah.expiringmap.ExpirationListener;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @Getter
 public class TempBlock implements Revertible {
 

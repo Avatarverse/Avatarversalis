@@ -1,7 +1,7 @@
 package net.avatarverse.avatarversalis.core.user;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,37 +14,43 @@ import java.util.stream.Stream;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.ability.AbilityManager;
+import net.avatarverse.avatarversalis.core.attribute.AttributeModifier;
 import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.temporary.Cooldown;
+import net.avatarverse.avatarversalis.event.user.UserBindChangeEvent;
+import net.avatarverse.avatarversalis.event.user.UserBindCopyEvent;
+import net.avatarverse.avatarversalis.event.user.UserCooldownEvent;
+import net.avatarverse.avatarversalis.event.user.UserElementChangeEvent;
+import net.avatarverse.avatarversalis.event.user.UserElementChangeEvent.Result;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
-@Getter
+@DefaultAnnotation(NonNull.class)
 public abstract class User {
 
 	public static final Map<UUID, User> USERS = new HashMap<>();
 	public static final Map<Block, BlockUser> BLOCK_USERS = new HashMap<>();
 
-	protected final UUID uuid;
-	@Setter protected boolean toggled;
-	protected final Map<Element, Boolean> elements; // <Element, Toggled?>
-	protected final Map<Integer, Ability> binds;
+	@Getter protected final UUID uuid;
+	@Getter @Setter protected boolean toggled;
+	@Getter @Setter protected boolean invincible;
+	@Getter protected boolean permaremoved;
+	protected final Map<Element, Boolean> elements = new ConcurrentHashMap<>(); // <Element, Toggled?>
+	protected final Map<Integer, Ability> binds = new ConcurrentHashMap<>();
+	protected final Map<Element, Set<AttributeModifier>> elementModifiers = new ConcurrentHashMap<>();
+	protected final Map<Ability, Set<AttributeModifier>> abilityModifiers = new ConcurrentHashMap<>();
 
 	public User(UUID uuid) {
 		this.uuid = uuid;
-		this.elements = new ConcurrentHashMap<>();
-		this.binds = new ConcurrentHashMap<>();
 		for (int i = 0; i < 9; i++)
 			binds.put(i, null);
 		USERS.put(uuid, this);
@@ -55,11 +61,7 @@ public abstract class User {
 	}
 
 	public static @Nullable User byName(String name) {
-		return all().filter(u -> u.name().equals(name)).findAny().orElse(null);
-	}
-
-	public static @Nullable User byEntity(Entity entity) {
-		return USERS.get(entity.getUniqueId());
+		return all().filter(u -> u.name().equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	public static Stream<User> all() {
@@ -82,19 +84,30 @@ public abstract class User {
 		return AbilityManager.INSTANCES_BY_USER.get(this).stream().filter(a -> a.getClass().equals(clazz)).map(clazz::cast).findAny().orElse(null);
 	}
 
+	public Map<Element, Boolean> elementsMap() {
+		return new ConcurrentHashMap<>(elements);
+	}
+
+	public Set<Element> elements() {
+		return new HashSet<>(elements.keySet());
+	}
+
 	public boolean hasElement(Element element) {
 		return elements.containsKey(element);
 	}
 
 	public void addElement(Element... elements) {
+		if (new UserElementChangeEvent(this, Result.ADD, elements).call().isCancelled()) return;
 		Arrays.stream(elements).forEach(e -> this.elements.put(e, true));
 	}
 
 	public void removeElement(Element... elements) {
+		if (new UserElementChangeEvent(this, Result.REMOVE, elements).call().isCancelled()) return;
 		Arrays.stream(elements).forEach(this.elements::remove);
 	}
 
 	public void clearElements() {
+		if (new UserElementChangeEvent(this, Result.REMOVE, elements.keySet()).call().isCancelled()) return;
 		elements.clear();
 	}
 
@@ -114,12 +127,32 @@ public abstract class User {
 		return elements.getOrDefault(element, false);
 	}
 
+	public Map<Integer, Ability> binds() {
+		return new ConcurrentHashMap<>(binds);
+	}
+
 	public void bind(Ability ability, int slot) {
+		if (new UserBindChangeEvent(this, ability, slot, UserBindChangeEvent.Result.BIND).call().isCancelled()) return;
 		binds.put(slot, ability);
 	}
 
+	public void clearBinds() {
+		binds.keySet().forEach(this::unbind);
+	}
+
 	public void unbind(int slot) {
+		Ability ability = binds.get(slot);
+		if (ability == null || new UserBindChangeEvent(this, ability, slot, UserBindChangeEvent.Result.UNBIND).call().isCancelled()) return;
 		binds.put(slot, null);
+	}
+
+	public boolean copyBinds(User other) {
+		if (new UserBindCopyEvent(this, other).call().isCancelled()) return false;
+		other.binds.forEach((slot, ability) -> {
+			if (canBend(ability))
+				bind(ability, slot);
+		});
+		return true;
 	}
 
 	public boolean isOnCooldown(Ability ability) {
@@ -156,12 +189,54 @@ public abstract class User {
 
 	public boolean removeCooldown(String ability) {
 		Cooldown cooldown = cooldown(ability);
-		return cooldown != null && cooldown.remove();
+		if (cooldown == null || new UserCooldownEvent(this, cooldown, UserCooldownEvent.Result.END).call().isCancelled())
+			return false;
+		return cooldown.remove();
+	}
+
+	public Map<Element, Set<AttributeModifier>> elementModifiers() {
+		return new ConcurrentHashMap<>(elementModifiers);
+	}
+
+	public Set<AttributeModifier> modifiers(Element element) {
+		return new HashSet<>(elementModifiers.getOrDefault(element, Collections.emptySet()));
+	}
+
+	public Map<Ability, Set<AttributeModifier>> abilityModifiers() {
+		return new ConcurrentHashMap<>(abilityModifiers);
+	}
+
+	public Set<AttributeModifier> modifiers(Ability ability) {
+		return new HashSet<>(abilityModifiers.getOrDefault(ability, Collections.emptySet()));
+	}
+
+	public void addModifier(Element element, AttributeModifier modifier) {
+		elementModifiers.computeIfAbsent(element, set -> new HashSet<>()).add(modifier);
+	}
+
+	public void addModifier(Ability ability, AttributeModifier modifier) {
+		abilityModifiers.computeIfAbsent(ability, set -> new HashSet<>()).add(modifier);
+	}
+
+	public void clearModifiers() {
+		elementModifiers.forEach((e, set) -> set.clear());
+		abilityModifiers.forEach((a, set) -> set.clear());
+	}
+
+	public void permaremove() {
+		if (new UserElementChangeEvent(this, Result.PERMAREMOVE, elements.keySet()).call().isCancelled()) return;
+		permaremoved = true;
+		clearElements();
+	}
+
+	public void unPermaremove() {
+		permaremoved = false;
 	}
 
 	public abstract String name();
 	public abstract boolean canBend(Ability ability);
 	public abstract int currentSlot();
+	public abstract void currentSlot(int slot);
 	public abstract @Nullable Ability selectedAbility();
 	public abstract Location location();
 	public abstract Location eyeLocation();

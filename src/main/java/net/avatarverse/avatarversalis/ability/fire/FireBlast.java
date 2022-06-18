@@ -2,7 +2,7 @@ package net.avatarverse.avatarversalis.ability.fire;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import net.avatarverse.avatarversalis.config.AbilityConfig;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
@@ -102,7 +102,7 @@ public class FireBlast extends AbilityInstance {
 
 		@Override
 		public void onLoad() {
-			ConfigurationNode ability = root.node("abilities", "fire", "FireBlast");
+			CommentedConfigurationNode ability = root.node("abilities", "fire", "FireBlast");
 
 			cooldown = ability.node("cooldown").getLong(1500);
 			damage = ability.node("damage").getDouble(2);
@@ -110,7 +110,7 @@ public class FireBlast extends AbilityInstance {
 			speed = ability.node("speed").getDouble(1);
 			fireTicks = ability.node("fire-ticks").getInt(1);
 
-			ConfigurationNode radius = ability.node("radius");
+			CommentedConfigurationNode radius = ability.node("radius");
 
 			hitRadius = radius.node("hit").getDouble(1);
 			particleRadius = radius.node("particle").getDouble(0.275);

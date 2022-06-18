@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.util;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import org.bukkit.entity.Entity;
@@ -11,16 +10,16 @@ import org.bukkit.util.Vector;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.user.EntityUser;
 import net.avatarverse.avatarversalis.core.user.User;
-import net.avatarverse.avatarversalis.event.AbilityAffectEntityEvent;
+import net.avatarverse.avatarversalis.event.ability.AbilityAffectEntityEvent;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public final class Effects {
@@ -37,6 +36,7 @@ public final class Effects {
 	}
 
 	public void apply(Entity entity) {
+		if (Wrapper.of(EntityUser.of(entity)).check(User::invincible)) return;
 		if (new AbilityAffectEntityEvent(this, entity).call().isCancelled()) return;
 
 		if (velocity != null)

@@ -8,11 +8,14 @@ import org.bukkit.block.data.Lightable;
 
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.user.User;
-import net.avatarverse.avatarversalis.event.AbilityKindleEvent;
+import net.avatarverse.avatarversalis.event.ability.AbilityKindleEvent;
 
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.Getter;
 import lombok.Setter;
 
+@DefaultAnnotation(NonNull.class)
 public final class Fire {
 
 	@Getter @Setter private static DayFactor dayFactor = new DayFactor();

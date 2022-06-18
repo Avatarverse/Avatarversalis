@@ -1,15 +1,13 @@
 package net.avatarverse.avatarversalis.util.text;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.Color;
 
 import net.md_5.bungee.api.ChatColor;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public interface Colors {
 
 	ChatColor WATER = ChatColor.of("");

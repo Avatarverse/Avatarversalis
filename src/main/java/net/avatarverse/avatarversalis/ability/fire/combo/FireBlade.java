@@ -1,6 +1,6 @@
 package net.avatarverse.avatarversalis.ability.fire.combo;
 
-import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import net.avatarverse.avatarversalis.config.AbilityConfig;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
@@ -41,7 +41,7 @@ public class FireBlade extends AbilityInstance {
 
 		@Override
 		public void onLoad() {
-			ConfigurationNode ability = root.node("abilities", "fire", "combo", "FireBlade");
+			CommentedConfigurationNode ability = root.node("abilities", "fire", "combo", "FireBlade");
 
 			cooldown = ability.node("cooldown").getLong();
 			damage = ability.node("damage").getDouble();

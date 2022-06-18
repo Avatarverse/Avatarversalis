@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.core.board;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,14 +24,14 @@ import net.avatarverse.avatarversalis.util.text.Lang;
 
 import net.md_5.bungee.api.ChatColor;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.Getter;
 
 /**
  * Manager for every instance of {@link BendingBoard}
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public final class BendingBoardManager {
 
 	private final Map<UUID, BendingBoard> playerBoards;
@@ -45,7 +44,7 @@ public final class BendingBoardManager {
 		disabledPlayers = Collections.synchronizedSet(new HashSet<>());
 		trackedCooldowns = new ConcurrentHashMap<>();
 
-		ConfigurationNode boardSettings = Avatarversalis.config().node("properties", "board");
+		ConfigurationNode boardSettings = Avatarversalis.config().node("properties", "scoreboard");
 
 		enabled = boardSettings.node("enabled").getBoolean(true);
 		for (ConfigurationNode node : boardSettings.node("extra-cooldowns").childrenList()) {
@@ -69,8 +68,7 @@ public final class BendingBoardManager {
 	public Optional<BendingBoard> board(AvatarPlayer player) {
 		if (!enabled || !player.valid())
 			return Optional.empty();
-		playerBoards.putIfAbsent(player.uuid(), new BendingBoard(player));
-		return Optional.of(playerBoards.get(player.uuid()));
+		return Optional.of(playerBoards.computeIfAbsent(player.uuid(), u -> new BendingBoard(player)));
 	}
 
 	public boolean enabled(AvatarPlayer player) {
@@ -99,8 +97,9 @@ public final class BendingBoardManager {
 		return Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
 	}
 
-	public static final class BendingBoard {
+	public final class BendingBoard {
 
+		private static final String SEPARATOR = Avatarversalis.config().node("properties", "scoreboard", "misc-separator").getString(" -------------- ");
 		private static final Map<Integer, String> UNIQUE_IDENTIFIERS = new ConcurrentHashMap<>();
 		static {
 			for (int slot = 0; slot < 16; slot++) {
@@ -110,14 +109,15 @@ public final class BendingBoardManager {
 
 		private final Scoreboard board;
 		private final Objective objective;
+		private final Map<String, Team> misc = new ConcurrentHashMap<>(); // section of scoreboard for additional cooldowns, like combos
 		private final AvatarPlayer player;
 		private int currentSlot;
 
-		public BendingBoard(AvatarPlayer player) {
+		private BendingBoard(AvatarPlayer player) {
 			this.player = player;
 			this.board = newBoard();
 			this.objective = board.registerNewObjective("BendingBoard", "dummy", Lang.BOARD_TITLE.asString());
-			this.currentSlot = player.player().getInventory().getHeldItemSlot() + 1;
+			this.currentSlot = player.currentSlot() + 1;
 			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 			show();
 		}
@@ -136,11 +136,14 @@ public final class BendingBoardManager {
 			board.getTeams().forEach(Team::unregister);
 			objective.unregister();
 			hide();
+			playerBoards.remove(player.uuid());
 		}
 
 		public void switchSlot(int newSlot) {
+			newSlot++;
 			team(currentSlot).setPrefix(" ");
 			team(newSlot).setPrefix(">");
+			currentSlot = newSlot;
 		}
 
 		public void update() {
@@ -148,9 +151,28 @@ public final class BendingBoardManager {
 		}
 
 		public void update(int slot) {
-			Ability selected = player.selectedAbility();
-			String suffix = selected != null ? (player.isOnCooldown(selected) ? Lang.strikethrough(selected.displayName()) : selected.displayName()) : Lang.BOARD_EMPTY.asString(slot);
+			slot++;
+			Ability ability = player.binds().get(slot);
+			String suffix = ability != null ? (player.isOnCooldown(ability) ? Lang.strikethrough(ability.displayName()) : ability.displayName()) : Lang.BOARD_EMPTY.asString(slot);
 			team(slot).setSuffix(suffix);
+		}
+
+		public void updateMisc(String cooldownName, boolean add) {
+			Team team = misc.computeIfAbsent(cooldownName, c -> createTeam(10 + misc.size()));
+			if (add) {
+				if (misc.containsKey(cooldownName)) return;
+				if (misc.isEmpty())
+					objective.getScore(SEPARATOR).setScore(-10);
+				Ability ability = Ability.byName(cooldownName);
+				ChatColor color = ability != null ? ability.element().display().color() : trackedCooldowns.getOrDefault(cooldownName, ChatColor.WHITE);
+				team.setPrefix("  " + color + Lang.strikethrough(cooldownName));
+			} else if (misc.containsKey(cooldownName)) {
+				team.getEntries().forEach(board::resetScores);
+				team.unregister();
+				misc.remove(cooldownName);
+				if (misc.isEmpty())
+					board.resetScores(SEPARATOR);
+			}
 		}
 
 		private Team team(int slot) {

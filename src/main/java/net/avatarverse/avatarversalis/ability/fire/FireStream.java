@@ -1,6 +1,6 @@
 package net.avatarverse.avatarversalis.ability.fire;
 
-import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import net.avatarverse.avatarversalis.config.AbilityConfig;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
@@ -73,7 +73,7 @@ public class FireStream extends AbilityInstance {
 
 		@Override
 		public void onLoad() {
-			ConfigurationNode ability = root.node("abilities", "fire", "FireStream");
+			CommentedConfigurationNode ability = root.node("abilities", "fire", "FireStream");
 
 			cooldown = ability.node("cooldown").getLong();
 			duration = ability.node("duration").getLong();
@@ -84,7 +84,7 @@ public class FireStream extends AbilityInstance {
 			hitRadius = ability.node("hit-radius").getDouble();
 			igniteBlockRadius = ability.node("ignite-block-radius").getDouble();
 
-			ConfigurationNode particle = ability.node("particle");
+			CommentedConfigurationNode particle = ability.node("particle");
 
 			particleAmount = particle.node("amount").getInt();
 			particleSpread = particle.node("spread").getDouble();

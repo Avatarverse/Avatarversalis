@@ -1,7 +1,9 @@
 package net.avatarverse.avatarversalis.config;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -12,6 +14,8 @@ import net.avatarverse.avatarversalis.core.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.attribute.AttributeModifier;
 import net.avatarverse.avatarversalis.core.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.attribute.ModifierOperation;
+
+import lombok.SneakyThrows;
 
 /**
  * Loads ability configs, applies modifiers
@@ -29,53 +33,39 @@ public abstract class AbilityConfig implements Cloneable {
 		onLoad();
 	}
 
+	@SneakyThrows
 	@SuppressWarnings({"unchecked", "deprecation"})
 	public <T extends AbilityConfig> T applyModifiers(AbilityInstance instance) {
-		T modified;
-		try {
-			modified = (T) clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return (T) this;
-		}
+		T modified = (T) clone();
 
 		for (Field field : modified.getClass().getDeclaredFields()) {
 			if (!field.isAnnotationPresent(Modifiable.class)) continue;
-			boolean wasAccessible = field.isAccessible();
-			field.setAccessible(true);
-			modifyField(field, instance.modifiers());
-			field.setAccessible(wasAccessible);
+			try {
+				boolean accessible = field.isAccessible();
+				field.setAccessible(true);
+				modifyField(field, instance.modifiers());
+				field.setAccessible(accessible);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return modified;
 	}
 
-	private void modifyField(Field field, Collection<AttributeModifier> modifiers) {
-		Number value;
-		try {
-			value = (Number) field.get(this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-			return;
-		}
+	private void modifyField(Field field, Set<AttributeModifier> modifiers) throws IllegalAccessException {
+		Number value = (Number) field.get(this);
 
 		Consumer<AttributeModifier> modify = am -> am.operation().modify(value, am.modifier());
-		Collection<AttributeModifier> filtered = modifiers.stream().filter(am -> hasAttribute(field, am.attribute())).toList();
+		List<AttributeModifier> filtered = modifiers.stream().filter(am -> hasAttribute(field, am.attribute())).toList();
 		filtered.stream().filter(am -> am.operation() == ModifierOperation.ADD).forEach(modify);
 		filtered.stream().filter(am -> am.operation() == ModifierOperation.MULTIPLY).forEach(modify);
 
-		try {
-			field.set(this, value);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		field.set(this, value);
 	}
 
 	private boolean hasAttribute(Field field, Attribute attribute) {
-		for (Modifiable modifiable : field.getAnnotationsByType(Modifiable.class))
-			if (attribute.equals(modifiable.value()))
-				return true;
-		return false;
+		return Arrays.stream(field.getAnnotationsByType(Modifiable.class)).anyMatch(m -> attribute == m.value());
 	}
 
 	public abstract void onLoad();

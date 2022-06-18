@@ -1,19 +1,17 @@
 package net.avatarverse.avatarversalis.util;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import net.avatarverse.avatarversalis.Avatarversalis;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * A utility class for quickly running and scheduling synchronous and asynchronous {@link BukkitTask}s.
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public final class Scheduler {
 
 	/**

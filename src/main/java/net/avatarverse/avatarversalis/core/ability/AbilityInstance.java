@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.core.ability;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,9 +8,10 @@ import net.avatarverse.avatarversalis.core.element.Element;
 import net.avatarverse.avatarversalis.core.element.fire.Fire;
 import net.avatarverse.avatarversalis.core.element.water.Water;
 import net.avatarverse.avatarversalis.core.user.User;
-import net.avatarverse.avatarversalis.event.AbilityStartEvent;
+import net.avatarverse.avatarversalis.event.ability.AbilityStartEvent;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +19,7 @@ import lombok.Setter;
 /**
  * An actual instance of an Ability. Individual abilities should extend this class.
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @Getter
 public abstract class AbilityInstance {
 
@@ -37,6 +36,7 @@ public abstract class AbilityInstance {
 		if (!user.canBend(ability)) return;
 
 		addBaseModifiers();
+		addUserModifiers();
 		load();
 	}
 
@@ -49,7 +49,13 @@ public abstract class AbilityInstance {
 			modifiers.addAll(Water.nightFactor().modifiers()); // TODO && isNight
 	}
 
+	private void addUserModifiers() {
+		modifiers.addAll(user.modifiers(ability.element()));
+		modifiers.addAll(user.modifiers(ability));
+	}
+
 	protected final void start() {
+		if (user.permaremoved()) return;
 		if (new AbilityStartEvent(user, this).call().isCancelled()) return;
 		AbilityManager.INSTANCES.add(this);
 		AbilityManager.INSTANCES_BY_USER.get(user).add(this);

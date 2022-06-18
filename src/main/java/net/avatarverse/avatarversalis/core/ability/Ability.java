@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.core.ability;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,20 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.avatarverse.avatarversalis.core.element.Element;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Represents static ability information, as opposed to an instance of the ability.
  * Building an Ability automatically adds it to the AbilityManager collections.
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @Getter
 public class Ability {
 
@@ -32,7 +31,8 @@ public class Ability {
 	private final Map<Activation, Class<? extends AbilityInstance>> activations;
 	private final Map<Class<? extends AbilityInstance>, Set<Activation>> controls;
 	private final List<ComboStep> comboSteps;
-	private final boolean bindable, hidden, combo, passive;
+	private final List<Ability> subAbilities;
+	private final boolean bindable, hidden, combo, passive, multiAbility, subAbility;
 
 	private Ability(Builder builder) {
 		this.name = builder.name;
@@ -42,10 +42,13 @@ public class Ability {
 		this.activations = builder.activations;
 		this.controls = builder.controls;
 		this.comboSteps = builder.comboSteps;
+		this.subAbilities = builder.subAbilities;
 		this.bindable = builder.bindable;
 		this.hidden = builder.hidden;
 		this.combo = builder.combo;
 		this.passive = builder.passive;
+		this.multiAbility = builder.multiAbility;
+		this.subAbility = builder.subAbility;
 
 		this.author = builder.author;
 		this.version = builder.version;
@@ -58,6 +61,10 @@ public class Ability {
 
 	public static @Nullable Ability byName(String name) {
 		return AbilityManager.ABILITIES_BY_NAME.get(name);
+	}
+
+	public static @Nullable Ability byNameIgnoreCase(String name) {
+		return AbilityManager.ABILITIES_BY_NAME.values().stream().filter(a -> a.name.equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	public String displayName() {
@@ -77,7 +84,8 @@ public class Ability {
 		private final Map<Activation, Class<? extends AbilityInstance>> activations = new HashMap<>();
 		private final Map<Class<? extends AbilityInstance>, Set<Activation>> controls = new HashMap<>();
 		private final List<ComboStep> comboSteps = new ArrayList<>();
-		private boolean bindable, hidden, combo, passive;
+		private List<Ability> subAbilities = new ArrayList<>();
+		private boolean bindable, hidden, combo, passive, multiAbility, subAbility;
 
 		public Builder description(String description) {
 			this.description = description;
@@ -117,6 +125,17 @@ public class Ability {
 			return activation(Activation.COMBO, ability);
 		}
 
+		public Builder multiAbility(List<Ability> subAbilities) {
+			this.multiAbility = true;
+			this.subAbilities = subAbilities;
+			return this;
+		}
+
+		public Builder subAbility() {
+			this.subAbility = true;
+			return hidden();
+		}
+
 		public Builder passive() {
 			this.passive = true;
 			return this;
@@ -140,7 +159,25 @@ public class Ability {
 				bindable = false;
 				passive = false;
 			}
+			if (multiAbility && passive) {
+				passive = false;
+			}
 			return new Ability(this);
+		}
+
+		@NoArgsConstructor
+		public static class MultiAbilityBuilder {
+
+			private final List<Ability> subAbilities = new ArrayList<>();
+
+			public MultiAbilityBuilder add(Ability ability) {
+				subAbilities.add(ability);
+				return this;
+			}
+
+			public List<Ability> build() {
+				return subAbilities;
+			}
 		}
 
 	}

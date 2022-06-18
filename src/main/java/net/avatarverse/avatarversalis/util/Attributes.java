@@ -1,15 +1,12 @@
 package net.avatarverse.avatarversalis.util;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.avatarverse.avatarversalis.core.attribute.ModifierOperation;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public final class Attributes {
 
 	public static @Nullable Pair<ModifierOperation, Double> parseExpression(String expression) {

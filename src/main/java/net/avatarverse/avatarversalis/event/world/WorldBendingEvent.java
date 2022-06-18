@@ -1,6 +1,8 @@
-package net.avatarverse.avatarversalis.event;
+package net.avatarverse.avatarversalis.event.world;
 
 import org.bukkit.World;
+
+import net.avatarverse.avatarversalis.event.BendingEvent;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

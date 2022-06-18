@@ -1,15 +1,14 @@
-package net.avatarverse.avatarversalis.event;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+package net.avatarverse.avatarversalis.event.ability;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.util.Effects;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.Getter;
 
 /**
@@ -17,8 +16,7 @@ import lombok.Getter;
  * <br>
  * Note that any of the effects may be null.
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @Getter
 public class AbilityAffectEntityEvent extends AbilityEvent {
 

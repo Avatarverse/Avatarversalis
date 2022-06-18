@@ -18,10 +18,15 @@ import net.avatarverse.avatarversalis.Avatarversalis;
 import net.avatarverse.avatarversalis.core.ability.Ability;
 import net.avatarverse.avatarversalis.core.ability.AbilityInstance;
 import net.avatarverse.avatarversalis.core.ability.Activation;
+import net.avatarverse.avatarversalis.core.user.EntityUser;
 import net.avatarverse.avatarversalis.core.user.User;
-import net.avatarverse.avatarversalis.event.WorldSunriseEvent;
-import net.avatarverse.avatarversalis.event.WorldSunsetEvent;
+import net.avatarverse.avatarversalis.event.world.WorldSunriseEvent;
+import net.avatarverse.avatarversalis.event.world.WorldSunsetEvent;
 
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+
+@DefaultAnnotation(NonNull.class)
 public class Controller implements Listener {
 
 	public void activate(User user, Activation activation) {
@@ -56,7 +61,7 @@ public class Controller implements Listener {
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) {
 		if (event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK) return;
-		Optional.ofNullable(User.byEntity(event.getPlayer())).ifPresent(u ->
+		Optional.ofNullable(EntityUser.of(event.getPlayer())).ifPresent(u ->
 				activate(u, Activation.ATTACK)
 		);
 	}
@@ -64,14 +69,14 @@ public class Controller implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-		Optional.ofNullable(User.byEntity(event.getPlayer())).ifPresent(u ->
+		Optional.ofNullable(EntityUser.of(event.getPlayer())).ifPresent(u ->
 				activate(u, Activation.INTERACT)
 		);
 	}
 
 	@EventHandler
 	public void onInteractEntity(PlayerInteractEntityEvent event) {
-		Optional.ofNullable(User.byEntity(event.getPlayer())).ifPresent(u ->
+		Optional.ofNullable(EntityUser.of(event.getPlayer())).ifPresent(u ->
 				activate(u, Activation.INTERACT_ENTITY)
 		);
 	}
@@ -79,14 +84,14 @@ public class Controller implements Listener {
 	@EventHandler
 	public void onInteractBlock(PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-		Optional.ofNullable(User.byEntity(event.getPlayer())).ifPresent(u ->
+		Optional.ofNullable(EntityUser.of(event.getPlayer())).ifPresent(u ->
 				activate(u, Activation.INTERACT_BLOCK)
 		);
 	}
 
 	@EventHandler
 	public void onSneak(PlayerToggleSneakEvent event) {
-		Optional.ofNullable(User.byEntity(event.getPlayer())).ifPresent(u ->
+		Optional.ofNullable(EntityUser.of(event.getPlayer())).ifPresent(u ->
 				activate(u, event.isSneaking() ? Activation.SNEAK : Activation.SNEAK_RELEASE)
 		);
 	}
@@ -94,7 +99,7 @@ public class Controller implements Listener {
 	@EventHandler
 	public void onFall(EntityDamageEvent event) {
 		if (event.getCause() != DamageCause.FALL) return;
-		Optional.ofNullable(User.byEntity(event.getEntity())).ifPresent(u ->
+		Optional.ofNullable(EntityUser.of(event.getEntity())).ifPresent(u ->
 				activate(u, Activation.FALL)
 		);
 	}

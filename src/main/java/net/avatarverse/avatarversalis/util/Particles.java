@@ -1,7 +1,5 @@
 package net.avatarverse.avatarversalis.util;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -13,13 +11,13 @@ import net.avatarverse.avatarversalis.core.temporary.TempBlock;
 import net.avatarverse.avatarversalis.core.user.User;
 import net.avatarverse.avatarversalis.util.text.Colors;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Particles {
 

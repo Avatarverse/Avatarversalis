@@ -2,9 +2,12 @@ package net.avatarverse.avatarversalis.core.element;
 
 import net.md_5.bungee.api.ChatColor;
 
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+@DefaultAnnotation(NonNull.class)
 @RequiredArgsConstructor
 @Data
 public class ElementDisplay {

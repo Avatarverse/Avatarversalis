@@ -1,6 +1,5 @@
 package net.avatarverse.avatarversalis.core.element;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -9,21 +8,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.google.common.collect.ImmutableSet;
 
 import net.avatarverse.avatarversalis.util.text.Colors;
 
 import net.md_5.bungee.api.ChatColor;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Element {
 
@@ -78,6 +76,10 @@ public class Element {
 
 	public static @Nullable Element byName(String name) {
 		return ELEMENTS.get(name);
+	}
+
+	public static @Nullable Element byNameIgnoreCase(String name) {
+		return all().filter(e -> e.name().equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	public static Stream<String> names() {

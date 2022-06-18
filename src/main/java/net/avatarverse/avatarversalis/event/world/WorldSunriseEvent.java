@@ -1,4 +1,4 @@
-package net.avatarverse.avatarversalis.event;
+package net.avatarverse.avatarversalis.event.world;
 
 import org.bukkit.World;
 

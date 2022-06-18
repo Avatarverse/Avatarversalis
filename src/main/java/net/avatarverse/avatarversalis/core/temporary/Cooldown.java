@@ -1,26 +1,26 @@
 package net.avatarverse.avatarversalis.core.temporary;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.avatarverse.avatarversalis.core.user.User;
+import net.avatarverse.avatarversalis.event.user.UserCooldownEvent;
+import net.avatarverse.avatarversalis.event.user.UserCooldownEvent.Result;
 
 import net.jodah.expiringmap.ExpirationListener;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 @Data
 public class Cooldown implements Revertible {
 
@@ -35,6 +35,8 @@ public class Cooldown implements Revertible {
 		this.uuid = user.uuid();
 		this.ability = ability;
 		this.endTask = endTask;
+
+		if (new UserCooldownEvent(user, this, Result.START).call().isCancelled()) return;
 
 		COOLDOWNS.computeIfAbsent(uuid, this::newMap).put(ability, this, duration, TimeUnit.MILLISECONDS);
 	}

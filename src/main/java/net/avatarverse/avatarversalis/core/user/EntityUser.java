@@ -1,34 +1,32 @@
 package net.avatarverse.avatarversalis.core.user;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Nullable;
 
 import net.avatarverse.avatarversalis.core.ability.Ability;
-import net.avatarverse.avatarversalis.core.temporary.Cooldown;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lombok.Getter;
 
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
+@DefaultAnnotation(NonNull.class)
 public class EntityUser extends User {
 
 	@Getter private final Entity entity;
+	private int currentSlot;
 
 	public EntityUser(Entity entity) {
 		super(entity.getUniqueId());
 		this.entity = entity;
 	}
 
-	@Override
-	public @Nullable Cooldown cooldown(Ability ability) {
-		return null;
+	public static @Nullable EntityUser of(Entity entity) {
+		User user = byId(entity.getUniqueId());
+		return user != null ? user.as(EntityUser.class) : null;
 	}
 
 	@Override
@@ -43,7 +41,12 @@ public class EntityUser extends User {
 
 	@Override
 	public int currentSlot() {
-		return 0;
+		return currentSlot;
+	}
+
+	@Override
+	public void currentSlot(int slot) {
+		this.currentSlot = slot;
 	}
 
 	@Override
