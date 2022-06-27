@@ -8,7 +8,7 @@ import net.avatarverse.avatarversalis.core.game.ability.Ability;
 import net.avatarverse.avatarversalis.core.game.attribute.AttributeModifier;
 import net.avatarverse.avatarversalis.core.game.element.fire.Fire;
 import net.avatarverse.avatarversalis.core.game.element.water.Water;
-import net.avatarverse.avatarversalis.bending.listener.ability.AbilityConfigLoadListener;
+import net.avatarverse.avatarversalis.core.listener.ability.AbilityConfigLoadListener;
 
 public class AbilityListener implements AbilityConfigLoadListener {
 	@Override

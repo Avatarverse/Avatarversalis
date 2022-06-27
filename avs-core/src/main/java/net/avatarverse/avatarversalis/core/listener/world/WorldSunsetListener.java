@@ -1,7 +1,7 @@
-package net.avatarverse.avatarversalis.bending.listener.world;
+package net.avatarverse.avatarversalis.core.listener.world;
 
 import net.avatarverse.avatarversalis.core.event.world.WorldSunsetEvent;
-import net.avatarverse.avatarversalis.bending.listener.Listener;
+import net.avatarverse.avatarversalis.core.listener.Listener;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
