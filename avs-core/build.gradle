@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = project.group
+version = project.version
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven { url = uri('https://repo.aikar.co/content/groups/aikar/') }
+    maven { url = uri('https://repo.karuslabs.com/repository/lingua-franca-releases/') }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    implementation 'com.github.spotbugs:spotbugs-annotations:4.6.0'
+    implementation 'net.jodah:expiringmap:0.5.10'
+    implementation 'org.spongepowered:configurate-yaml:4.1.2'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
+    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
+    implementation 'com.karuslabs:lingua-franca:1.0.7'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+}
