@@ -23,9 +23,6 @@ public final class AbilityManager {
 	public static final Map<User, Set<AbilityInstance>> INSTANCES_BY_USER = new HashMap<>();
 
 	public AbilityManager() {
-		registerCoreAbilities();
-		registerAddonAbilities();
-
 		Game.plugin().scheduler().repeat(this::update);
 	}
 
@@ -41,18 +38,7 @@ public final class AbilityManager {
 		}
 	}
 
-	private void registerCoreAbilities() {
-	}
-
-	private void registerAddonAbilities() {
-
-	}
-
-	/**
-	 * Registers a plugin's addon abilities (classes that extend {@link AbilityInstance}) from a package
-	 * @param packageName the fully qualified package name containing {@link AbilityInstance} classes
-	 */
-	public static void registerPluginAbilities(String packageName) {
+	public static void registerAbilities(Class<?> clazz, String packageName) {
 
 	}
 

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.avatarverse.avatarversalis.core.game.Game;
 import net.avatarverse.avatarversalis.core.game.attribute.AttributeModifier;
+import net.avatarverse.avatarversalis.core.game.element.Element;
 import net.avatarverse.avatarversalis.core.game.user.User;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -15,6 +16,11 @@ import lombok.Setter;
 
 /**
  * An actual instance of an Ability. Individual abilities should extend this class.
+ *
+ * All AbilityInstances require a static void method named register() to remotely register the ability.
+ *
+ * @see Ability#builder(String, Element)
+ * @see Ability.Builder#build()
  */
 @DefaultAnnotation(NonNull.class)
 @Getter
