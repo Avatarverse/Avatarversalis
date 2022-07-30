@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.reflections.Reflections;
+
 import net.avatarverse.avatarversalis.core.game.Game;
 import net.avatarverse.avatarversalis.core.game.user.User;
 
@@ -38,7 +40,9 @@ public final class AbilityManager {
 		}
 	}
 
-	public static void registerAbilities(Class<?> clazz, String packageName) {
+	public static void registerAbilities(String packageName) {
+		Set<Class<? extends AbilityInstance>> set = new Reflections(packageName).getSubTypesOf(AbilityInstance.class);
+
 
 	}
 

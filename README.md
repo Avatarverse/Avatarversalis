@@ -51,3 +51,6 @@ What's left:
 - Any utility classes/methods we may need
 
 The actual bending/gameplay mechanics are still in their brainstorming phase. That's where you come in! Drop your great ideas in the #suggestions channel in our [Discord](https://discord.gg/6vGgHZeqY6), and let's have a discussion!
+
+## Contributing
+Avatarversalis welcomes contributions of any kind. The project is still in development, so the code you see here is not set in stone. If there are problems with it, please feel free to point them out. If you would like to make a pull request, we welcome that, but please try to conform to the established code style, particularly the fluent getters/setters style. If you're interested in making some long-term contributions by joining the development team, please send me a DM on Discord. We will also be opening other positions eventually, such as Bug Testers and a Marketing Manager.
