@@ -1,5 +1,8 @@
 package net.avatarverse.avatarversalis.core.game.ability;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,7 +13,9 @@ import java.util.stream.Stream;
 import org.reflections.Reflections;
 
 import net.avatarverse.avatarversalis.core.game.Game;
+import net.avatarverse.avatarversalis.core.game.element.Element;
 import net.avatarverse.avatarversalis.core.game.user.User;
+import net.avatarverse.avatarversalis.core.util.text.Lang;
 
 /**
  * Manages all registered instances of {@link Ability} and {@link AbilityInstance}
@@ -40,10 +45,30 @@ public final class AbilityManager {
 		}
 	}
 
+	/**
+	 * Registers abilities in the package corresponding to the given package name.
+	 * Only classes that extend AbilityInstance are loaded and registered.
+	 * All classes that extend AbilityInstance must contain a static method called <code>register</code>.
+	 * @param packageName the fully qualified package name to read
+	 * @see AbilityInstance
+	 * @see Ability#builder(String, Element)
+	 */
 	public static void registerAbilities(String packageName) {
-		Set<Class<? extends AbilityInstance>> set = new Reflections(packageName).getSubTypesOf(AbilityInstance.class);
+		Set<Class<? extends AbilityInstance>> abilityClasses = new Reflections(packageName).getSubTypesOf(AbilityInstance.class);
 
-
+		for (Class<? extends AbilityInstance> ability : abilityClasses) {
+			try {
+				Method registerMethod = ability.getMethod("register");
+				registerMethod.setAccessible(true);
+				if (!Modifier.isStatic(registerMethod.getModifiers()))
+					throw new NoSuchMethodException();
+				registerMethod.invoke(null);
+			} catch (NoSuchMethodException e) {
+				Lang.warn(Lang.ABILITY_MANAGER_REGISTER_METHOD_NOT_FOUND, ability.getName());
+			} catch (InvocationTargetException | IllegalAccessException e) {
+				Lang.warn(Lang.ABILITY_MANAGER_REGISTER_INVOKE_ERROR, ability.getName(), e.getLocalizedMessage());
+			}
+		}
 	}
 
 	public static Stream<Ability> all() {

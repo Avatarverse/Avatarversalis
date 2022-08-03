@@ -4,7 +4,9 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import net.avatarverse.avatarversalis.bending.Bending;
 import net.avatarverse.avatarversalis.core.config.AbilityConfig;
+import net.avatarverse.avatarversalis.core.game.ability.Ability;
 import net.avatarverse.avatarversalis.core.game.ability.AbilityInstance;
+import net.avatarverse.avatarversalis.core.game.ability.Activation;
 import net.avatarverse.avatarversalis.core.game.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.game.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.game.element.fire.Fire;
@@ -117,5 +119,13 @@ public class FireBlast extends AbilityInstance {
 			particleRadius = radius.node("particle").getDouble(0.275);
 			igniteBlockRadius = radius.node("ignite-block").getDouble(1);
 		}
+	}
+
+	public static void register() {
+		Ability.builder("FireBlast", Bending.FIRE)
+				.activation(Activation.ATTACK, FireBlast.class)
+				.activation(Activation.SNEAK, FireBlastCharged.class)
+				.control(FireBlastCharged.class, Activation.SNEAK_RELEASE)
+				.bindable().build();
 	}
 }

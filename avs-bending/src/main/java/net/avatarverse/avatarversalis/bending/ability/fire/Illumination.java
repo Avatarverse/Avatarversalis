@@ -4,7 +4,9 @@ import org.spongepowered.configurate.ConfigurationNode;
 
 import net.avatarverse.avatarversalis.bending.Bending;
 import net.avatarverse.avatarversalis.core.config.AbilityConfig;
+import net.avatarverse.avatarversalis.core.game.ability.Ability;
 import net.avatarverse.avatarversalis.core.game.ability.AbilityInstance;
+import net.avatarverse.avatarversalis.core.game.ability.Activation;
 import net.avatarverse.avatarversalis.core.game.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.game.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.game.policy.EndingPolicy;
@@ -83,5 +85,12 @@ public class Illumination extends AbilityInstance {
 			cooldown = ability.node("cooldown").getLong();
 			duration = ability.node("duration").getLong();
 		}
+	}
+
+	public static void register() {
+		Ability.builder("Illumination", Bending.FIRE)
+				.activation(Activation.ATTACK, Illumination.class)
+				.control(Illumination.class, Activation.ATTACK)
+				.bindable().build();
 	}
 }

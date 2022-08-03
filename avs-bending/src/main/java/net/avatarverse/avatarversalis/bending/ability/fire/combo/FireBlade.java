@@ -2,8 +2,12 @@ package net.avatarverse.avatarversalis.bending.ability.fire.combo;
 
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
+import net.avatarverse.avatarversalis.bending.Bending;
 import net.avatarverse.avatarversalis.core.config.AbilityConfig;
+import net.avatarverse.avatarversalis.core.game.ability.Ability;
 import net.avatarverse.avatarversalis.core.game.ability.AbilityInstance;
+import net.avatarverse.avatarversalis.core.game.ability.Activation;
+import net.avatarverse.avatarversalis.core.game.ability.ComboStep;
 import net.avatarverse.avatarversalis.core.game.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.game.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.game.user.User;
@@ -48,5 +52,14 @@ public class FireBlade extends AbilityInstance {
 			range = ability.node("range").getDouble();
 			speed = ability.node("speed").getDouble();
 		}
+	}
+
+	public static void register() {
+		Ability.builder("FireBlade", Bending.FIRE)
+				.combo(FireBlade.class,
+						new ComboStep("FireBlast", Activation.ATTACK),
+						new ComboStep("FireBlast", Activation.ATTACK),
+						new ComboStep("FireBlast", Activation.SNEAK),
+						new ComboStep("FireBlast", Activation.ATTACK)).build();
 	}
 }

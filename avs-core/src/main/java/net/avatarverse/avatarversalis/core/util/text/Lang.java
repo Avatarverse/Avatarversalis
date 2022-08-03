@@ -29,6 +29,7 @@ public interface Lang {
 	ThreadLocal<MessageFormat> FORMATTER = ThreadLocal.withInitial(() -> new MessageFormat(""));
 	Pattern ALPHANUMERIC = Pattern.compile("[A-Za-z0-9]+");
 
+	// COMMANDS
 	Message USER_INVALID_ACTION = translate("generic.invalid-action", "The valid subcommands are: {0}, {1}, {2}, {3}.");
 	Message INVALID_ELEMENT = translate("generic.invalid-element", "Element {0} is invalid.");
 	Message ELEMENT_CHANGE = translate("generic.element-change", "You are now a {0}.");
@@ -82,8 +83,13 @@ public interface Lang {
 	Message TOGGLE_OTHER_SUCCESS = translate("command.toggle.other.success", "Successfully toggled {0}'s bending.");
 	Message TOGGLE_OTHER_ELEMENT_SUCCESS = translate("command.toggle.other.element", "Successfully toggled {0}'s {1}.");
 
+	// BENDING BOARD
 	Message BOARD_TITLE = translate("scoreboard.title", "&lAbilities");
 	Message BOARD_EMPTY = translate("scoreboard.empty-slot", " ---- Slot {0} ---- ");
+
+	// MISCELLANEOUS ERRORS
+	Message ABILITY_MANAGER_REGISTER_METHOD_NOT_FOUND = translate("misc-errors.ability-manager.register-method-not-found", "Unable to find static \"register\" method in {0}. Cannot register ability.");
+	Message ABILITY_MANAGER_REGISTER_INVOKE_ERROR = translate("misc.errors-ability-manager.register-invoke-error", "Error while registering {0}: {1}");
 
 	static Message translate(String key, String def) {
 		return new Message(BUNDLE.get(key).orElse(def));
@@ -106,6 +112,18 @@ public interface Lang {
 
 	static void severe(String message) {
 		Game.plugin().log().severe(colorify(message));
+	}
+
+	static void info(Message message, Object... args) {
+		Game.plugin().log().info(message.asString(args));
+	}
+
+	static void warn(Message message, Object... args) {
+		Game.plugin().log().warning(message.asString(args));
+	}
+
+	static void severe(Message message, Object... args) {
+		Game.plugin().log().severe(message.asString(args));
 	}
 
 	static String colorify(String message) {

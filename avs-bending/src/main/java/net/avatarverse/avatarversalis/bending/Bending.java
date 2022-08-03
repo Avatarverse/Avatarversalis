@@ -1,16 +1,10 @@
 package net.avatarverse.avatarversalis.bending;
 
-import net.avatarverse.avatarversalis.bending.ability.fire.FireBlast;
-import net.avatarverse.avatarversalis.bending.ability.fire.FireBlastCharged;
-import net.avatarverse.avatarversalis.bending.ability.fire.Illumination;
-import net.avatarverse.avatarversalis.bending.ability.fire.combo.FireBlade;
+import net.avatarverse.avatarversalis.bending.listener.AbilityListener;
 import net.avatarverse.avatarversalis.core.game.Game;
-import net.avatarverse.avatarversalis.core.game.ability.Ability;
-import net.avatarverse.avatarversalis.core.game.ability.Activation;
-import net.avatarverse.avatarversalis.core.game.ability.ComboStep;
+import net.avatarverse.avatarversalis.core.game.ability.AbilityManager;
 import net.avatarverse.avatarversalis.core.game.element.Element;
 import net.avatarverse.avatarversalis.core.game.element.ElementDisplay;
-import net.avatarverse.avatarversalis.bending.listener.AbilityListener;
 import net.avatarverse.avatarversalis.core.platform.ChatColor;
 import net.avatarverse.avatarversalis.core.util.text.Colors;
 
@@ -47,28 +41,6 @@ public class Bending {
 
 	public void init() {
 		Game.addAbilityConfigLoadListener(new AbilityListener());
-	}
-
-	public void registerBendingAbilities() {
-		// FIRE
-
-		// FireBlast
-		Ability.builder("FireBlast", FIRE)
-				.activation(Activation.ATTACK, FireBlast.class)
-				.activation(Activation.SNEAK, FireBlastCharged.class)
-				.control(FireBlastCharged.class, Activation.SNEAK_RELEASE)
-				.bindable().build();
-		// Illumination
-		Ability.builder("Illumination", FIRE)
-				.activation(Activation.ATTACK, Illumination.class)
-				.control(Illumination.class, Activation.ATTACK)
-				.bindable().build();
-		// FireBlade
-		Ability.builder("FireBlade", FIRE)
-				.combo(FireBlade.class,
-						new ComboStep("FireBlast", Activation.ATTACK),
-						new ComboStep("FireBlast", Activation.ATTACK),
-						new ComboStep("FireBlast", Activation.SNEAK),
-						new ComboStep("FireBlast", Activation.ATTACK)).build();
+		AbilityManager.registerAbilities("net.avatarverse.avatarversalis.bending.ability");
 	}
 }
