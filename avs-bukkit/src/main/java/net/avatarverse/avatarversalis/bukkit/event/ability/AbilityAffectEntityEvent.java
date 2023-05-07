@@ -14,10 +14,10 @@ import lombok.Getter;
 public class AbilityAffectEntityEvent extends AbilityEvent implements net.avatarverse.avatarversalis.core.event.ability.AbilityAffectEntityEvent {
 
 	@Getter private final Entity entity;
-	@Getter(onMethod_=@Nullable) private final Vector velocity;
-	@Getter(onMethod_=@Nullable) private final Double damage;
-	@Getter(onMethod_=@Nullable) private final Integer fireTicks, freezeTicks;
-	@Getter(onMethod_=@Nullable) private final PotionEffect[] potionEffects;
+	private final Vector velocity;
+	private final Double damage;
+	private final Integer fireTicks, freezeTicks;
+	private final PotionEffect[] potionEffects;
 
 	public AbilityAffectEntityEvent(Effects effects, Entity entity) {
 		super(effects.user(), effects.ability());
@@ -28,5 +28,25 @@ public class AbilityAffectEntityEvent extends AbilityEvent implements net.avatar
 		this.fireTicks = effects.fireTicks();
 		this.freezeTicks = effects.freezeTicks();
 		this.potionEffects = effects.potionEffects();
+	}
+
+	public @Nullable Vector velocity() {
+		return this.velocity;
+	}
+
+	public @Nullable Double damage() {
+		return this.damage;
+	}
+
+	public @Nullable Integer fireTicks() {
+		return this.fireTicks;
+	}
+
+	public @Nullable Integer freezeTicks() {
+		return this.freezeTicks;
+	}
+
+	public @Nullable PotionEffect[] potionEffects() {
+		return this.potionEffects;
 	}
 }

@@ -37,6 +37,7 @@ public final class AbilityManager {
 		Iterator<AbilityInstance> iterator = INSTANCES.iterator();
 		while (iterator.hasNext()) {
 			AbilityInstance instance = iterator.next();
+			instance.tick++;
 			if (!instance.update()) {
 				iterator.remove();
 				INSTANCES_BY_USER.get(instance.user).remove(instance);

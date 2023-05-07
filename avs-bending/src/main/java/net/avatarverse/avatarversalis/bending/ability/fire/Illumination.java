@@ -11,9 +11,9 @@ import net.avatarverse.avatarversalis.core.game.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.game.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.game.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.game.policy.Policies;
-import net.avatarverse.avatarversalis.core.game.policy.specific.ExpirationPolicy;
-import net.avatarverse.avatarversalis.core.game.policy.specific.LiquidPolicy;
-import net.avatarverse.avatarversalis.core.game.policy.specific.SolidPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.ExpirationPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.LiquidPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.SolidPolicy;
 import net.avatarverse.avatarversalis.core.game.user.User;
 import net.avatarverse.avatarversalis.core.platform.Location;
 import net.avatarverse.avatarversalis.core.util.Particles;
@@ -69,7 +69,7 @@ public class Illumination extends AbilityInstance {
 
 	@Override
 	public void onAttack() {
-		end();
+		stop();
 	}
 
 	@Getter

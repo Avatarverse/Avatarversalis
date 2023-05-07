@@ -3,7 +3,7 @@ package net.avatarverse.avatarversalis.core.game.policy;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.avatarverse.avatarversalis.core.game.policy.specific.ExpirationPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.ExpirationPolicy;
 import net.avatarverse.avatarversalis.core.game.user.User;
 
 import lombok.AllArgsConstructor;

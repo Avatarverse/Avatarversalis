@@ -1,7 +1,7 @@
 name: Avatarversalis
-author: Aztl, s3nn
+author: Aztl
 api-version: 1.18
-version: ${project.version}
+version: ${projectVersion}
 main: net.avatarverse.avatarversalis.core.Avatarversalis
 softdepend: [PlaceholderAPI]
 commands:

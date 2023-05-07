@@ -11,7 +11,6 @@ import net.avatarverse.avatarversalis.core.game.Scheduler;
 import net.avatarverse.avatarversalis.core.platform.World;
 import net.avatarverse.avatarversalis.core.platform.scoreboard.Scoreboard;
 
-import co.aikar.commands.CommandManager;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -23,7 +22,6 @@ public interface Avatarversalis {
 	String version();
 	ConfigManager configManager();
 	Game game();
-	CommandManager commandManager();
 	Controller controller();
 	EventBus eventBus();
 	Scheduler scheduler();

@@ -156,11 +156,10 @@ public class Ability {
 				// load from config
 			}
 			if (combo && (bindable || passive)) {
-				bindable = false;
-				passive = false;
+				throw new UnsupportedOperationException("Combo abilities cannot be bindable or passive");
 			}
 			if (multiAbility && passive) {
-				passive = false;
+				throw new UnsupportedOperationException("Multiabilities cannot be passives");
 			}
 			return new Ability(this);
 		}

@@ -10,10 +10,10 @@ import net.avatarverse.avatarversalis.core.game.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.game.element.fire.Fire;
 import net.avatarverse.avatarversalis.core.game.policy.CompositeEndingPolicy;
 import net.avatarverse.avatarversalis.core.game.policy.Policies;
-import net.avatarverse.avatarversalis.core.game.policy.specific.LiquidPolicy;
-import net.avatarverse.avatarversalis.core.game.policy.specific.ProtectedRegionPolicy;
-import net.avatarverse.avatarversalis.core.game.policy.specific.RangePolicy;
-import net.avatarverse.avatarversalis.core.game.policy.specific.SolidPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.LiquidPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.ProtectedRegionPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.RangePolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.SolidPolicy;
 import net.avatarverse.avatarversalis.core.game.user.User;
 import net.avatarverse.avatarversalis.core.platform.Location;
 import net.avatarverse.avatarversalis.core.platform.util.Vector;
@@ -118,7 +118,7 @@ public class FireBlastCharged extends AbilityInstance {
 	}
 
 	public boolean explode() {
-		end();
+		stop();
 		return true;
 	}
 

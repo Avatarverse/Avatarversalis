@@ -6,16 +6,13 @@ import net.avatarverse.avatarversalis.core.game.user.User;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import lombok.AccessLevel;
-import lombok.Getter;
 
 @DefaultAnnotation(NonNull.class)
-@Getter
 public abstract class AbilityEvent extends UserEvent implements net.avatarverse.avatarversalis.core.event.ability.AbilityEvent {
 
 	protected final AbilityInstance ability;
 
-	@Getter(AccessLevel.NONE) protected boolean cancelled = false;
+	protected boolean cancelled = false;
 
 	public AbilityEvent(User user, AbilityInstance ability) {
 		super(user);
@@ -25,6 +22,10 @@ public abstract class AbilityEvent extends UserEvent implements net.avatarverse.
 	public AbilityEvent call() {
 		super.call();
 		return this;
+	}
+
+	public AbilityInstance ability() {
+		return this.ability;
 	}
 
 	@Override

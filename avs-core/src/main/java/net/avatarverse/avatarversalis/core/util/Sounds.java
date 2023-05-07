@@ -14,19 +14,21 @@ import net.avatarverse.avatarversalis.core.platform.SoundCategory;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @DefaultAnnotation(NonNull.class)
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Setter
 public final class Sounds {
 
 	private final Sound sound;
-	private final List<Sound> sounds = new ArrayList<>(Collections.singleton(sound));
+	private final List<Sound> sounds;
 	private SoundCategory category;
 	private float volume = 1, pitch = 1;
+
+	private Sounds(Sound sound) {
+		this.sound = sound;
+		this.sounds = new ArrayList<>(Collections.singletonList(sound));
+	}
 
 	public static Sounds of(Sound sound) {
 		return new Sounds(sound);

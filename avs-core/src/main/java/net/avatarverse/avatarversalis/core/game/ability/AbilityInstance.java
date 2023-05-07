@@ -3,6 +3,8 @@ package net.avatarverse.avatarversalis.core.game.ability;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.avatarverse.avatarversalis.core.event.ability.AbilityConfigLoadEvent;
+import net.avatarverse.avatarversalis.core.event.ability.AbilityStartEvent;
 import net.avatarverse.avatarversalis.core.game.Game;
 import net.avatarverse.avatarversalis.core.game.attribute.AttributeModifier;
 import net.avatarverse.avatarversalis.core.game.element.Element;
@@ -30,7 +32,14 @@ public abstract class AbilityInstance {
 	protected final Ability ability;
 	protected final Set<AttributeModifier> modifiers;
 	@Getter(AccessLevel.NONE) protected long startTime;
+	protected long tick;
 
+	/**
+	 * Instantiates a new AbilityInstance for the given user.
+	 * Does not complete instantiation if the user cannot bend the ability.
+	 * Also loads the ability's configured values.
+	 * @param user the user of this ability
+	 */
 	public AbilityInstance(User user) {
 		this.user = user;
 		this.ability = AbilityManager.ABILITIES_BY_CLASS.get(getClass());
@@ -48,6 +57,9 @@ public abstract class AbilityInstance {
 		modifiers.addAll(user.modifiers(ability));
 	}
 
+	/**
+	 * Starts the ability by setting it as an actively updating instance.
+	 */
 	protected final void start() {
 		if (user.permaremoved()) return;
 		if (!Game.eventBus().postAbilityStartEvent(user, this)) return;
@@ -57,7 +69,10 @@ public abstract class AbilityInstance {
 		postStart();
 	}
 
-	public final void end() {
+	/**
+	 * Stops the ability by removing it from the actively updating instances.
+	 */
+	public final void stop() {
 		if (AbilityManager.INSTANCES.contains(this)) {
 			AbilityManager.INSTANCES.remove(this);
 			AbilityManager.INSTANCES_BY_USER.get(user).remove(this);
@@ -65,10 +80,25 @@ public abstract class AbilityInstance {
 		}
 	}
 
+	/**
+	 * Called just after the ability is instantiated. Not called if the user cannot bend the ability or the {@link AbilityConfigLoadEvent} is cancelled.
+	 */
 	protected abstract void load();
+
+	/**
+	 * Called just after the ability is started. Not called if the {@link AbilityStartEvent} is cancelled.
+	 */
 	protected abstract void postStart();
+
+	/**
+	 * Called every tick while the ability is active.
+	 * @return true if the ability should continue to be updated, false if it should stop
+	 */
 	protected abstract boolean update();
 
+	/**
+	 * Called just after the ability is stopped.
+	 */
 	protected void cleanup() {}
 
 	protected void onAttack() {}

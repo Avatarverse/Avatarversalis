@@ -9,7 +9,7 @@ import net.avatarverse.avatarversalis.core.game.attribute.Attribute;
 import net.avatarverse.avatarversalis.core.game.attribute.Modifiable;
 import net.avatarverse.avatarversalis.core.game.policy.EndingPolicy;
 import net.avatarverse.avatarversalis.core.game.policy.Policies;
-import net.avatarverse.avatarversalis.core.game.policy.specific.SolidLiquidPolicy;
+import net.avatarverse.avatarversalis.core.game.policy.type.SolidLiquidPolicy;
 import net.avatarverse.avatarversalis.core.game.user.User;
 import net.avatarverse.avatarversalis.core.util.Particles;
 import net.avatarverse.avatarversalis.core.util.Sounds;

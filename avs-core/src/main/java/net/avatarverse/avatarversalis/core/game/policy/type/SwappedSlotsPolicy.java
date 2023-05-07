@@ -1,4 +1,4 @@
-package net.avatarverse.avatarversalis.core.game.policy.specific;
+package net.avatarverse.avatarversalis.core.game.policy.type;
 
 import java.util.function.Predicate;
 
